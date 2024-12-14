@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "MjSmkjb4lFfepkt2fww9MAweoOLkWMMkv9yRzVWulgY=",
+  "Source": "MekanikApi",
+  "BasePath": "_content/MekanikApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

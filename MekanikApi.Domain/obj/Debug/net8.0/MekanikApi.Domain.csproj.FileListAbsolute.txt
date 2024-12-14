@@ -1,0 +1,12 @@
+C:\Users\user\Documents\coding\MekanikApi\MekanikApi.Domain\obj\Debug\net8.0\MekanikApi.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\Documents\coding\MekanikApi\MekanikApi.Domain\obj\Debug\net8.0\MekanikApi.Domain.AssemblyInfoInputs.cache
+C:\Users\user\Documents\coding\MekanikApi\MekanikApi.Domain\obj\Debug\net8.0\MekanikApi.Domain.AssemblyInfo.cs
+C:\Users\user\Documents\coding\MekanikApi\MekanikApi.Domain\obj\Debug\net8.0\MekanikApi.Domain.csproj.CoreCompileInputs.cache
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Domain\obj\Debug\net8.0\MekanikApi.Domain.csproj.AssemblyReference.cache
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Domain\bin\Debug\net8.0\MekanikApi.Domain.deps.json
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Domain\bin\Debug\net8.0\MekanikApi.Domain.dll
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Domain\bin\Debug\net8.0\MekanikApi.Domain.pdb
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Domain\obj\Debug\net8.0\MekanikApi.Domain.dll
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Domain\obj\Debug\net8.0\refint\MekanikApi.Domain.dll
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Domain\obj\Debug\net8.0\MekanikApi.Domain.pdb
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Domain\obj\Debug\net8.0\ref\MekanikApi.Domain.dll
