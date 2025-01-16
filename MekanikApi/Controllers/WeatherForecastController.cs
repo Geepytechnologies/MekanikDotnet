@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace MekanikApi.Controllers
+namespace MekanikApi.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]

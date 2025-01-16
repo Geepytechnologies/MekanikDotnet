@@ -1,4 +1,4 @@
-﻿namespace sispay.Api.Extensions
+﻿namespace MekanikApi.Api.Extensions
 {
     public static class HttpContextExtensions
     {

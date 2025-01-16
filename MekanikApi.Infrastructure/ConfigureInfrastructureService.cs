@@ -24,42 +24,23 @@ namespace MekanikApi.Infrastructure
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseNpgsql(Environment.GetEnvironmentVariable("postgressdb"),
-                    b => b.MigrationsAssembly("MekanikApi.Api"));
+                    b => b.MigrationsAssembly("MekanikApi.Api").UseNetTopologySuite());
                 options.EnableDetailedErrors(true);
             });
 
             services.AddIdentity<User, IdentityRole<Guid>>(options =>
             {
                 options.User.RequireUniqueEmail = true;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
                 options.Password.RequiredLength = 6;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
                 options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.AllowedForNewUsers = true;
             }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
-            services.AddHttpClient("termii", (serviceProvider, httpClient) =>
-            {
-                httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-                httpClient.BaseAddress = new Uri("https://v3.api.termii.com");
-            });
-            services.AddHttpClient("tokenClient", httpClient =>
-            {
-                httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-                httpClient.BaseAddress = new Uri("https://api.sandbox.safehavenmfb.com/");
-            });
-            services.AddHttpClient("vtu", httpClient =>
-            {
-                httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-                httpClient.BaseAddress = new Uri("https://subandgain.com/api/");
-            });
-            services.AddHttpClient("safehavencontactless", httpClient =>
-            {
-                httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-                httpClient.BaseAddress = new Uri("https://api.safehavenmc.com/pos/contactless");
-            });
+            
             
 
             // Register other services and repositories

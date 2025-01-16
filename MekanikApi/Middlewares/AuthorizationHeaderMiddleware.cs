@@ -1,7 +1,7 @@
 ﻿using MekanikApi.Application.DTOs.Common;
 using System.Text.Json;
 
-namespace MekanikApi.Middlewares
+namespace MekanikApi.Api.Middlewares
 {
     public class AuthorizationHeaderMiddleware
     {

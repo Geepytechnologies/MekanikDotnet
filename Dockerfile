@@ -9,20 +9,20 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["./sispay.Api/sispay.Api.csproj", "sispay.Api/"]
-COPY ["./sispay.Application/sispay.Application.csproj", "sispay.Application/"]
-COPY ["./sispay.Domain/sispay.Domain.csproj", "sispay.Domain/"]
-COPY ["./sispay.Infrastructure/sispay.Infrastructure.csproj", "sispay.Infrastructure/"]
-RUN dotnet restore "./sispay.Api/sispay.Api.csproj"
+COPY ["./MekanikApi.Api/MekanikApi.Api.csproj", "MekanikApi.Api/"]
+COPY ["./MekanikApi.Application/MekanikApi.Application.csproj", "MekanikApi.Application/"]
+COPY ["./MekanikApi.Domain/MekanikApi.Domain.csproj", "MekanikApi.Domain/"]
+COPY ["./MekanikApi.Infrastructure/MekanikApi.Infrastructure.csproj", "MekanikApi.Infrastructure/"]
+RUN dotnet restore "./MekanikApi.Api/MekanikApi.Api.csproj"
 COPY . .
-WORKDIR "/src/sispay.Api"
-RUN dotnet build "./sispay.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/MekanikApi.Api"
+RUN dotnet build "./MekanikApi.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./sispay.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./MekanikApi.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "sispay.Api.dll"]
+ENTRYPOINT ["dotnet", "MekanikApi.Api.dll"]

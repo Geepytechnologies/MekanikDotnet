@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MekanikApi", "MekanikApi\MekanikApi.csproj", "{A37019A6-CA09-4820-95C2-8014F5EC5659}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MekanikApi.Api", "MekanikApi\MekanikApi.Api.csproj", "{A37019A6-CA09-4820-95C2-8014F5EC5659}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MekanikApi.Infrastructure", "MekanikApi.Infrastructure\MekanikApi.Infrastructure.csproj", "{53FF97D1-168F-4939-A5CE-6766F35A1B07}"
 EndProject

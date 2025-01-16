@@ -19,5 +19,39 @@ namespace MekanikApi.Infrastructure.DataContext
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Conversation> Conversations { get; set; }
+        public DbSet<Message> Messages { get; set; }
+
+        public DbSet<Mechanic> Mechanics { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            //modelBuilder.Entity<User>().HasIndex(u => new { u.Latitude, u.Longitude });
+            modelBuilder.Entity<Conversation>()
+                .HasKey(c => c.Id);
+
+            modelBuilder.Entity<Conversation>()
+                .HasOne(c => c.User)
+                .WithMany(u => u.Conversations)
+                .HasForeignKey(c => c.UserId);
+
+            modelBuilder.Entity<Conversation>()
+                .HasOne(c => c.Participant)
+                .WithMany()
+                .HasForeignKey(c => c.ParticipantId);
+
+            modelBuilder.Entity<Message>()
+                .HasKey(m => m.Id);
+
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.Conversation)
+                .WithMany(c => c.Messages)
+                .HasForeignKey(m => m.ConversationId);
+
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.User)
+                .WithMany()
+                .HasForeignKey(m => m.UserId);
+        }
     }
 }
