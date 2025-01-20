@@ -4,6 +4,8 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using MekanikApi.Infrastructure.DataContext;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace MekanikApi.Infrastructure.Services
@@ -37,11 +39,11 @@ namespace MekanikApi.Infrastructure.Services
             }
         }
 
-        public static string GenerateRefreshToken(string phone)
+        public static string GenerateRefreshToken(string email)
         {
             IEnumerable<Claim> claims =
             [
-                new Claim(ClaimTypes.Name ,phone),
+                new Claim(ClaimTypes.Name ,email),
             ];
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWTKEY")));
 
@@ -57,11 +59,11 @@ namespace MekanikApi.Infrastructure.Services
             return tokenString;
         }
 
-        public static string GenerateAccessTokenAsync(string phone, Guid id, IList<string> roles)
+        public static string GenerateAccessTokenAsync(string email, Guid id, IList<string> roles)
         {
             List<Claim> claims =
             [
-                new Claim(ClaimTypes.Name ,phone),
+                new Claim(ClaimTypes.Name ,email),
                 new Claim(ClaimTypes.NameIdentifier, id.ToString())
             ];
 

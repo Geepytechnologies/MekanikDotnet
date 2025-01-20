@@ -1,0 +1,6 @@
+services:
+  mekanikapi.api:
+    image: ${DOCKER_REGISTRY-}mekanikapiapi
+    build:
+      context: .
+      dockerfile: MekanikApi/Dockerfile

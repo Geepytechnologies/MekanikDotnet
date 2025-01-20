@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\user\\Documents\\coding\\mekanikApi\\MekanikApi.Domain\\MekanikApi.Domain.csproj": {}
+    "C:\\Users\\user\\Documents\\coding\\MekanikApi\\MekanikApi.Domain\\MekanikApi.Domain.csproj": {}
   },
   "projects": {
-    "C:\\Users\\user\\Documents\\coding\\mekanikApi\\MekanikApi.Domain\\MekanikApi.Domain.csproj": {
+    "C:\\Users\\user\\Documents\\coding\\MekanikApi\\MekanikApi.Domain\\MekanikApi.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\user\\Documents\\coding\\mekanikApi\\MekanikApi.Domain\\MekanikApi.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\user\\Documents\\coding\\MekanikApi\\MekanikApi.Domain\\MekanikApi.Domain.csproj",
         "projectName": "MekanikApi.Domain",
-        "projectPath": "C:\\Users\\user\\Documents\\coding\\mekanikApi\\MekanikApi.Domain\\MekanikApi.Domain.csproj",
+        "projectPath": "C:\\Users\\user\\Documents\\coding\\MekanikApi\\MekanikApi.Domain\\MekanikApi.Domain.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\user\\Documents\\coding\\mekanikApi\\MekanikApi.Domain\\obj\\",
+        "outputPath": "C:\\Users\\user\\Documents\\coding\\MekanikApi\\MekanikApi.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

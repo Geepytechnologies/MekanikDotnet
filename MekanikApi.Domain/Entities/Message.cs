@@ -7,6 +7,13 @@ using System.Threading.Tasks;
 
 namespace MekanikApi.Domain.Entities
 {
+    public enum AttachmentType
+    {
+        None = 0, 
+        Image = 1,
+        Video = 2,
+        File = 3
+    }
     public class Message
     {
         public Guid Id { get; set; }
@@ -15,6 +22,8 @@ namespace MekanikApi.Domain.Entities
         public Guid UserId { get; set; }
         public User User { get; set; }
         public string Content { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public string? AttachmentUrl { get; set; }
+        public AttachmentType AttachmentType { get; set; } = AttachmentType.None;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

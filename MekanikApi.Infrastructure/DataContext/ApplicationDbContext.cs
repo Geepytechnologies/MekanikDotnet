@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MekanikApi.Infrastructure.DataContext
 {
-    public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
@@ -18,20 +18,32 @@ namespace MekanikApi.Infrastructure.DataContext
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 
-        public DbSet<User> Users { get; set; }
         public DbSet<Conversation> Conversations { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<JobRequest> JobRequests { get; set; }
+        public DbSet<Mechanic> Mechanics { get; set; }
         public DbSet<Message> Messages { get; set; }
 
-        public DbSet<Mechanic> Mechanics { get; set; }
+        public DbSet<News> News { get; set; }
+
+        public DbSet<Notification> Notifications { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
+
+        public DbSet<OrderItem> OrderItems { get; set; }
+
+        public DbSet<ApplicationUser> Users { get; set; }
+
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<User>().HasIndex(u => new { u.Latitude, u.Longitude });
             modelBuilder.Entity<Conversation>()
                 .HasKey(c => c.Id);
 
             modelBuilder.Entity<Conversation>()
-                .HasOne(c => c.User)
+                .HasOne(c => c.ApplicationUser)
                 .WithMany(u => u.Conversations)
                 .HasForeignKey(c => c.UserId);
 

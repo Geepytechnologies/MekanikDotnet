@@ -20,7 +20,7 @@ namespace MekanikApi.Api
             services.AddSwaggerGen(c =>
             {
                 c.EnableAnnotations();
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SisPay", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mekanik", Version = "v1" });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                 {
                     Name = "Authorization",

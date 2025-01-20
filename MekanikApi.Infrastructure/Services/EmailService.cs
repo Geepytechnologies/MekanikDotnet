@@ -7,22 +7,16 @@ using MimeKit.Text;
 
 namespace MekanikApi.Infrastructure.Services
 {
-    public class EmailService
+    public class EmailService(IConfiguration emailConfig, ILogger<EmailService> logger)
     {
-        private readonly IConfiguration _emailConfig;
-        private readonly ILogger<EmailService> _logger;
-
-        public EmailService(IConfiguration emailConfig, ILogger<EmailService> logger)
-        {
-            _emailConfig = emailConfig;
-            _logger = logger;
-        }
+        private readonly IConfiguration _emailConfig = emailConfig;
+        private readonly ILogger<EmailService> _logger = logger;
 
         public async Task<bool> SendEmailAsync(string toEmail, string subject)
         {
             try
             {
-                var body = await GetEmailBodyAsync("template.html");
+                var body = await GetEmailBodyAsync("verification.html");
 
                 var email = new MimeMessage();
                 email.From.Add(MailboxAddress.Parse(_emailConfig.GetSection("EmailConfiguration:From").Value));
@@ -73,4 +67,9 @@ namespace MekanikApi.Infrastructure.Services
             throw new FileNotFoundException($"Email template file '{templateFileName}' not found.");
         }
     }
+}
+
+public interface IEmailService
+{
+    Task<bool> SendEmailAsync(string toEmail, string subject, string body);
 }

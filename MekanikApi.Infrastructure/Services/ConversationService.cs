@@ -11,9 +11,9 @@ namespace MekanikApi.Infrastructure.Services
 {
     public interface IConversationService
     {
-        Task<Conversation> CreateConversationAsync(Guid userId, Guid participantId);
+        Task<Conversation> GetOrCreateConversationAsync(Guid userId, Guid participantId);
         Task<ICollection<Conversation>> GetConversationsAsync(Guid userId);
-        Task<Message> SendMessageAsync(Guid conversationId, Guid userId, string content);
+        Task<Message> SaveMessageAsync(Message message);
         Task<ICollection<Message>> GetMessagesAsync(Guid conversationId);
     }
 
@@ -26,11 +26,19 @@ namespace MekanikApi.Infrastructure.Services
             _dbContext = dbContext;
         }
 
-        public async Task<Conversation> CreateConversationAsync(Guid userId, Guid participantId)
+        public async Task<Conversation> GetOrCreateConversationAsync(Guid userId, Guid participantId)
         {
-            var conversation = new Conversation { UserId = userId, ParticipantId = participantId };
-            _dbContext.Conversations.Add(conversation);
-            await _dbContext.SaveChangesAsync();
+            var conversation = await _dbContext.Conversations
+                .Include(c => c.Messages)
+                .FirstOrDefaultAsync(c => (c.UserId == userId && c.ParticipantId == participantId) || (c.UserId == participantId && c.ParticipantId == userId));
+
+            if (conversation == null)
+            {
+                conversation = new Conversation { UserId = userId, ParticipantId = participantId };
+                _dbContext.Conversations.Add(conversation);
+                await _dbContext.SaveChangesAsync();
+            }
+
             return conversation;
         }
 
@@ -43,9 +51,9 @@ namespace MekanikApi.Infrastructure.Services
                 .ToListAsync();
         }
 
-        public async Task<Message> SendMessageAsync(Guid conversationId, Guid userId, string content)
+        public async Task<Message> SaveMessageAsync(Message message)
         {
-            var message = new Message { ConversationId = conversationId, UserId = userId, Content = content };
+            
             _dbContext.Messages.Add(message);
             await _dbContext.SaveChangesAsync();
             return message;

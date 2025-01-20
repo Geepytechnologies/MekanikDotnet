@@ -49,10 +49,12 @@ namespace MekanikApi.Application.DTOs.Auth.Requests
 
             RuleFor(user => user.Password)
                 .NotEmpty().WithMessage("Password is required.")
-                .Length(6).WithMessage("Password must be 6 characters.")
-                .Matches(@"^\d{6}$").WithMessage("Password must contain only 6 numeric characters.")
-                .Must(NotContainWhitespace).WithMessage("Password cannot contain whitespace.");
-            
+                .MinimumLength(4).WithMessage("Password must be more than 4 characters.")
+            .Matches(@"[A-Z]").WithMessage("Password must contain at least one uppercase letter.")
+            .Matches(@"[a-z]").WithMessage("Password must contain at least one lowercase letter.")
+            .Matches(@"\d").WithMessage("Password must contain at least one number.")
+            .Matches(@"[\W_]").WithMessage("Password must contain at least one special character.");
+
             RuleFor(user => user.Homeaddress)
                 .NotEmpty().WithMessage("Home Address is Required");
             RuleFor(user => user.DateOfBirth)

@@ -28,13 +28,13 @@ namespace MekanikApi.Infrastructure
                 options.EnableDetailedErrors(true);
             });
 
-            services.AddIdentity<User, IdentityRole<Guid>>(options =>
+            services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
             {
                 options.User.RequireUniqueEmail = true;
                 options.Password.RequireUppercase = true;
                 options.Password.RequireLowercase = true;
                 options.Password.RequireNonAlphanumeric = true;
-                options.Password.RequiredLength = 6;
+                options.Password.RequiredLength = 4;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
                 options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.AllowedForNewUsers = true;

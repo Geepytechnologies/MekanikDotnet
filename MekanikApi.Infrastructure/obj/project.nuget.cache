@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "sgdLC/50kOw=",
+  "dgSpecHash": "EmBVulvNErA=",
   "success": true,
-  "projectFilePath": "C:\\Users\\user\\Documents\\coding\\mekanikApi\\MekanikApi.Infrastructure\\MekanikApi.Infrastructure.csproj",
+  "projectFilePath": "C:\\Users\\user\\Documents\\coding\\MekanikApi\\MekanikApi.Infrastructure\\MekanikApi.Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\user\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",

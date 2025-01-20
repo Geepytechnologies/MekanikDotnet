@@ -18,187 +18,264 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Google.Apis.Auth;
+using System.Security.Cryptography;
 
 namespace MekanikApi.Infrastructure.Services
 {
     public class AuthService : IAuthService
-
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _config;
         private readonly ILogger<AuthService> _logger;
-        private readonly ApplicationDbContext _context;
-        private readonly IUserService _userService;
-        private readonly ISmsService _smsService;
-        private readonly IMapper _mapper;
+        private readonly ICacheService _cacheService;
+        private readonly IEmailService _emailService;
         private readonly IJwtService _jwtService;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public AuthService(UserManager<User> userManager, IConfiguration config, ILogger<AuthService> logger, ApplicationDbContext context, IUserService userService, IMapper mapper, SignInManager<User> signInManager, ISmsService smsService, IJwtService jwtService, IUnitOfWork unitOfWork)
+        public AuthService(UserManager<ApplicationUser> userManager, IConfiguration config, ILogger<AuthService> logger, ICacheService cacheService, IEmailService emailService, IJwtService jwtService, SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
             _config = config;
             _logger = logger;
-            _context = context;
-            _userService = userService;
-            _mapper = mapper;
-            _signInManager = signInManager;
-            _smsService = smsService;
+            _cacheService = cacheService;
+            _emailService = emailService;
             _jwtService = jwtService;
-            _unitOfWork = unitOfWork;
+            _signInManager = signInManager;
         }
-
-        public async Task<LoginResponse> Login(LoginRequestDTO user)
+        private static string GenerateOtp()
         {
-            
-            var identityuser = await _context.Users.FirstOrDefaultAsync(u => u.PhoneNumber == user.Phone);
+            Random random = new();
+            return random.Next(100000, 999999).ToString();
+        }
+        private static string HashValue(string value)
+        {
+            var bytes = Encoding.UTF8.GetBytes(value);
+            return Convert.ToBase64String(SHA256.HashData(bytes));
+        }
+        public static async Task<GoogleJsonWebSignature.Payload> VerifyGoogleToken(string accessToken)
+        {
+            try
+            {
+                var settings = new GoogleJsonWebSignature.ValidationSettings()
+                {
+                    Audience = new List<string> { Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID") }
+                };
+                var payload = await GoogleJsonWebSignature.ValidateAsync(accessToken, settings);
+                return payload;
+            }
+            catch (InvalidJwtException)
+            {
+                // Handle invalid token
+                return null;
+            }
+        }
+    
+
+
+        public async Task<bool> SendVerificationCode(string email, string otp, string firstname)
+        {
+            var body = await EmailService.GetEmailBodyAsync("verification.html");
+            var emailbody = body.Replace("{{OTP_CODE}}", otp).Replace("{{NAME}}", firstname);
+            var result = await _emailService.SendEmailAsync(email, "Clusstr Account Verification", emailbody);
+            return result;
+        }
+        public async Task<GenericResponse> Login(LoginRequestDTO user)
+        {
+            var identityuser = await _userManager.FindByEmailAsync(user.Email);
+
             if (identityuser is null)
             {
-                return new LoginResponse
+                return new GenericResponse
                 {
-                    Status = false,
+                    StatusCode = 404,
                     Message = "user not found"
                 };
+
             }
             var roles = await _userManager.GetRolesAsync(identityuser);
-           
-
-            var result = await _signInManager.PasswordSignInAsync(identityuser, user.Password, isPersistent: true, lockoutOnFailure: true);
-            _logger.LogInformation("signinmanagerResult: {data}", result.ToString());
-
+            var result = await _signInManager.PasswordSignInAsync(identityuser, user.Password, isPersistent: true, lockoutOnFailure: false);
             if (result.Succeeded)
             {
-              
-
-               
-                var _applicationUser = await _context.Users
-                    .Where(u => u.PhoneNumber == user.Phone)
-                    .FirstOrDefaultAsync();
-
-                //if (identityuser.IsVerified)
-                //{
-                //    var tokenstring = JwtService.GenerateAccessTokenAsync(user.Phone, identityuser.Id, roles);
-                //    var refreshToken = JwtService.GenerateRefreshToken(user.Phone);
-                //    identityuser.RefreshToken = refreshToken;
-                //    identityuser.RefreshTokenExpiry = DateTime.Now.AddHours(2);
-                //    identityuser.DeviceHash = deviceHash;
-                //    identityuser.PushToken = user.PushToken;
-
-                //    if (identityuser.DeviceHash == string.Empty)
-                //    {
-                //        identityuser.DeviceHash = deviceHash;
-                //    }
-
-                //    await UpdateUser(identityuser);
-
-
-
-                //    var userDetails = new UserLoginResponseDTO(
-                //        UserId: identityuser.Id,
-                //        FirstName: identityuser.Firstname,
-                //        MiddleName: identityuser.Middlename,
-                //        LastName: identityuser.Lastname,
-                //        PhoneNumber: identityuser.PhoneNumber,
-                //        Email: identityuser.Email,
-                //        BusinessName: identityuser.BusinessName,
-                //        HomeAddress: identityuser.Homeaddress,
-                //        DateOfBirth: identityuser.DateOfBirth,
-                //        LGA: identityuser.LGA,
-                //        StateOfOrigin: identityuser.StateOfOrigin,
-                //        ImageUrl: identityuser.ImageUrl,
-                //        Kyc: identityuser.KYC,
-                //        AccountPinSet: identityuser.AccountPinSet,
-                //        AccessToken: tokenstring,
-                //        RefreshToken: refreshToken
-                //        )
-
-                //    ;
-                //    return new LoginResponse
-                //    {
-                //        Status = true,
-                //        Message = "Login successful",
-                //        UserDetails = userDetails
-                //    };
-                //}
-                //else
-                //{
-                //    return new LoginResponse
-                //    {
-                //        Status = false,
-                //        Message = "User is not verified",
-                //        UserNotVerifiedDetails = new UserNotVerifiedResponseDTO(identityuser.Firstname,identityuser.Email, identityuser.PhoneNumber)
-                //    };
-                //}
-                return new LoginResponse
+                var _applicationUser = identityuser;
+                if (_applicationUser.EmailConfirmed)
                 {
-                    Status = false,
-                    Message = ""
-                };
+
+                    var tokenstring = JwtService.GenerateAccessTokenAsync(user.Email, identityuser.Id, roles);
+                    var refreshToken = JwtService.GenerateRefreshToken(user.Email);
+                    var hashedRefreshToken = HashValue(refreshToken);
+                    _applicationUser.RefreshToken = hashedRefreshToken;
+                    _applicationUser.RefreshTokenExpiry = DateTime.Now.AddHours(2);
+
+                    await _userManager.UpdateAsync(_applicationUser);
+
+
+
+
+                    var userDetails = new UserLoginResponseDTO(
+                        UserId: _applicationUser.Id,
+                        FirstName: _applicationUser.Firstname,
+                        MiddleName: _applicationUser.Middlename,
+                        LastName: _applicationUser.Lastname,
+                        PhoneNumber: _applicationUser.PhoneNumber,
+                        Email: _applicationUser.Email,
+                        Gender: _applicationUser.Gender,
+                        AccessToken: tokenstring,
+                        RefreshToken: refreshToken
+                        )
+
+
+                    ;
+                    if (!_applicationUser.CompletedOnboarding)
+                    {
+                        return new GenericResponse
+                        {
+                            StatusCode = 200,
+                            Message = "user hasn't been onboarded",
+                            Result = userDetails
+                        };
+                    }
+                    return new GenericResponse
+                    {
+                        StatusCode = 200,
+                        Message = "Login successful",
+                        Result = userDetails
+                    };
+                }
+                else
+                {
+                    string otp = GenerateOtp();
+                    var expiration = DateTime.UtcNow.AddMinutes(5);
+
+                    var existingClaims = await _userManager.GetClaimsAsync(identityuser);
+                    var otpCodeClaim = existingClaims.FirstOrDefault(c => c.Type == "otp_code");
+                    var otpExpirationClaim = existingClaims.FirstOrDefault(c => c.Type == "otp_expiration");
+
+                    if (otpCodeClaim != null)
+                    {
+                        await _userManager.RemoveClaimAsync(identityuser, otpCodeClaim);
+                    }
+                    if (otpExpirationClaim != null)
+                    {
+                        await _userManager.RemoveClaimAsync(identityuser, otpExpirationClaim);
+                    }
+
+                    var otpClaims = new List<Claim>
+                    {
+                    new("otp_code", otp),
+                    new("otp_expiration", expiration.ToString())
+                    };
+
+                    await _userManager.AddClaimsAsync(identityuser, otpClaims);
+                    await SendVerificationCode(user.Email, otp, identityuser.Firstname);
+                    return new GenericResponse
+                    {
+                        StatusCode = 401,
+                        Message = "User is not verified, Otp has been sent to email",
+                    };
+                }
+
             }
             else
             {
                 if (result.IsLockedOut)
                 {
-                    var userlockedoutresponse = new LoginResponse
+                    var userlockedoutresponse = new GenericResponse
                     {
-                        Status = false,
+                        StatusCode = 403,
                         Message = "Account locked. Please try again in 5 minutes",
                     };
                     return userlockedoutresponse;
                 }
-                return new LoginResponse
+                return new GenericResponse
                 {
-                    Status = false,
-                    Message = "Invalid phone or password."
+                    StatusCode = 400,
+                    Message = "Invalid email or password."
                 };
             }
         }
 
-        
-        public async Task<RegisterResponse> RegisterUser(RegisterRequestDTO user)
+        public async Task<GenericResponse> RegisterUser(RegisterRequestDTO user)
         {
-            _logger.LogInformation("Register User Details: {msg}", JsonConvert.SerializeObject(user));
-            var existingEmailUser = await _userManager.FindByEmailAsync(user.Email);
-            var existingPhoneUser = await _userManager.FindByNameAsync(user.PhoneNumber);
-
-            if (existingEmailUser is not null)
-            {
-                return new RegisterResponse
-                {
-                    Status = false,
-                    Message = "Email already exists"
-                };
-            }
-            if (existingPhoneUser is not null)
-            {
-                return new RegisterResponse
-                {
-                    Status = false,
-                    Message = "Phone already exists"
-                };
-            }
-
             try
             {
-                var identityUser = new User
+                var existingUser = await _userManager.FindByEmailAsync(user.Email);
+
+                if (existingUser != null)
                 {
-                    UserName = user.PhoneNumber,
+                    return new GenericResponse
+                    {
+                        StatusCode = 409,
+                        Message = "User already exists"
+                    };
+                }
+
+                string otp = GenerateOtp();
+                var emailRes = await SendVerificationCode(user.Email, otp, user.Firstname);
+
+                if (!emailRes)
+                {
+                    return new GenericResponse
+                    {
+                        StatusCode = 400,
+                        Message = "Failed to send verification email"
+                    };
+                }
+
+                var identityUser = new ApplicationUser
+                {
+                    UserName = user.Email,
                     Email = user.Email,
-                    
+                    NormalizedEmail = _userManager.NormalizeEmail(user.Email),
+                    Firstname = user.Firstname,
+                    Lastname = user.Lastname,
                 };
 
                 var result = await _userManager.CreateAsync(identityUser, user.Password);
+
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(identityUser, "User");
-                    var userId = identityUser.Id;
+                    var expiration = DateTime.UtcNow.AddMinutes(5);
 
-                    //await _accountService.CreateAccount(user.PhoneNumber, userId);
+                    var existingClaims = await _userManager.GetClaimsAsync(identityUser);
+                    var otpCodeClaim = existingClaims.FirstOrDefault(c => c.Type == "otp_code");
+                    var otpExpirationClaim = existingClaims.FirstOrDefault(c => c.Type == "otp_expiration");
 
-                    return new RegisterResponse
+                    if (otpCodeClaim != null)
                     {
-                        Status = true,
+                        await _userManager.RemoveClaimAsync(identityUser, otpCodeClaim);
+                    }
+
+                    if (otpExpirationClaim != null)
+                    {
+                        await _userManager.RemoveClaimAsync(identityUser, otpExpirationClaim);
+                    }
+
+                    var otpClaims = new List<Claim>
+                    {
+                        new("otp_code", otp),
+                        new("otp_expiration", expiration.ToString())
+                    };
+
+                    var addClaimsResult = await _userManager.AddClaimsAsync(identityUser, otpClaims);
+                    if (!addClaimsResult.Succeeded)
+                    {
+                        foreach (var error in addClaimsResult.Errors)
+                        {
+                            _logger.LogInformation("Error in adding claims: {data}", error.ToString());
+                            Console.WriteLine($"Error: {error.Code} - {error.Description}");
+                        }
+
+                        return new GenericResponse
+                        {
+                            StatusCode = 400,
+                            Message = "User created, but failed to add claims"
+                        };
+                    }
+
+                    return new GenericResponse
+                    {
+                        StatusCode = 201,
                         Message = "User created successfully"
                     };
                 }
@@ -206,265 +283,221 @@ namespace MekanikApi.Infrastructure.Services
                 {
                     foreach (var error in result.Errors)
                     {
-                        _logger.LogInformation("User Manager Error: {msg}", error.Description);
+                        _logger.LogInformation("Error in registration: {data}", error.ToString());
+                        Console.WriteLine($"Error: {error.Code} - {error.Description}");
                     }
-                    return new RegisterResponse
-                    {
-                        Status = false,
-                        Message = "user registration failed"
-                    };
-                }
-            }
-            catch (Exception ex)
-            {
-                string errorMessage = ex.Message;
-                while (ex.InnerException != null)
-                {
-                    ex = ex.InnerException;
-                    errorMessage += $" Inner Exception: {ex.Message}";
-                }
-                _logger.LogInformation("Registration Error: {msg}", errorMessage);
 
-                return new RegisterResponse
-                {
-                    Status = false,
-                    Message = "User registration failed"
-                };
-            }
-        }
-        public async Task<GenericResponse> ForgotPassword(ForgotPasswordDTO user)
-        {
-            try
-            {
-                //var verifyotpdetails = new ConfirmOtpDTO
-                //{
-                //    MobileNumber = user.MobileNumber,
-                //    Otp = user.Otp,
-                //    PinId = user.PinId
-                //};
-                //var verificationResult = await _smsService.VerifyOTP(verifyotpdetails);
-
-                //if (verificationResult.Result.Verified != "True")
-                //{
-                //    return new GenericResponse
-                //    {
-                //        StatusCode = 403,
-                //        Message = $"Otp verification failure: {verificationResult.Result.Verified}"
-                //    };
-                //}
-                var identityuser = await _context.Users.FirstOrDefaultAsync(u => u.PhoneNumber == user.MobileNumber);
-
-                if (identityuser is null)
-                {
-                    return new GenericResponse
-                    {
-                        StatusCode = 404,
-                        Message = "user not found"
-                    };
-                }
-                var token = await _userManager.GeneratePasswordResetTokenAsync(identityuser);
-                var result = await _userManager.ResetPasswordAsync(identityuser, token, user.Password);
-                if (result.Succeeded)
-                {
-                    return new GenericResponse
-                    {
-                        StatusCode = 200,
-                        Message = "Password Change Successful",
-                    };
-
-                }
-                else
-                {
                     return new GenericResponse
                     {
                         StatusCode = 400,
-                        Message = "Password Change Unsuccessful",
+                        Message = "User registration failed"
                     };
                 }
-            
             }
             catch (Exception ex)
             {
-                _logger.LogInformation("Error changing password: {msg}", ex.Message);
+                _logger.LogError(ex, "An error occurred while registering the user");
                 return new GenericResponse
                 {
                     StatusCode = 500,
-                    Message = "Something Went Wrong",
+                    Message = "Internal server error",
                 };
-                throw;
             }
-
         }
-        
-         public async Task<GenericResponse> ResetPassword(ResetPasswordDTO user, string accessToken)
+
+        public async Task<GenericResponse> GoogleAuth(GoogleRequestDTO user)
         {
             try
             {
-                var principal = _jwtService.GetTokenPrincipal(accessToken);
+                var existingUser = await _userManager.FindByEmailAsync(user.Email);
 
-                if (principal is null)
+                if (existingUser != null)
                 {
-                    return new GenericResponse
+
+                    var tokenstring = await _jwtService.GenerateAccessTokenAsync(user.Email);
+                    var refreshToken = JwtService.GenerateRefreshToken(user.Email);
+                    existingUser.RefreshToken = refreshToken;
+                    existingUser.RefreshTokenExpiry = DateTime.Now.AddHours(2);
+                    await _userManager.UpdateAsync(existingUser);
+
+                    var userDetails = new UserLoginResponseDTO(
+                        UserId: existingUser.Id,
+                        FirstName: existingUser.Firstname,
+                        MiddleName: existingUser.Middlename,
+                        LastName: existingUser.Lastname,
+                        PhoneNumber: existingUser.PhoneNumber,
+                        Email: existingUser.Email,
+                        Gender: existingUser.Gender,
+                        AccessToken: tokenstring,
+                        RefreshToken: refreshToken
+                        );
+
+                    if (!existingUser.CompletedOnboarding)
                     {
-                        StatusCode = 403,
-                        Message = "Error validating token"
-                    };
-                }
-
-                var userId = principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-                var identityUser = await _userManager.FindByIdAsync(userId);
-
-                if (identityUser is null)
-                {
-                    return new GenericResponse
-                    {
-                        StatusCode = 404,
-                        Message = "User not found"
-                    };
-                }
-                
-                
-                var isValidPassword = await _userManager.CheckPasswordAsync(identityUser, user.OldPassword);
-                if (!isValidPassword)
-                {
-                    return new GenericResponse
-                    {
-                        StatusCode = 400,
-                        Message = "Invalid Old Password"
-                    };
-                }
-
-                // Update password
-                var result = await _userManager.ChangePasswordAsync(identityUser, user.OldPassword, user.NewPassword);
-                
-                if (result.Succeeded)
-                {
+                        return new GenericResponse
+                        {
+                            StatusCode = 200,
+                            Message = "user hasn't been onboarded",
+                            Result = userDetails
+                        };
+                    }
                     return new GenericResponse
                     {
                         StatusCode = 200,
-                        Message = "Password Change Successful",
+                        Message = "Successful",
+                        Result = userDetails
                     };
-
                 }
-                else
+
+                var identityUser = new ApplicationUser
                 {
+                    UserName = user.Email,
+                    Email = user.Email,
+                    NormalizedEmail = _userManager.NormalizeEmail(user.Email),
+                    Firstname = user.Firstname,
+                    Lastname = user.Lastname,
+                    PhoneNumber = string.Empty,
+                    GoogleRegistration = true,
+                    Gender = string.Empty
+                };
+
+                var result = await _userManager.CreateAsync(identityUser);
+
+                if (result.Succeeded)
+                {
+
                     return new GenericResponse
                     {
                         StatusCode = 400,
-                        Message = "Password Change Unsuccessful",
+                        Message = "user hasn't been onboarded"
                     };
                 }
-            
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        _logger.LogInformation("Error in registration: {data}", error.ToString());
+                        Console.WriteLine($"Error: {error.Code} - {error.Description}");
+                    }
+
+                    return new GenericResponse
+                    {
+                        StatusCode = 400,
+                        Message = "User registration failed"
+                    };
+                }
             }
             catch (Exception ex)
             {
-                _logger.LogInformation("Error changing password: {msg}", ex.Message);
+                _logger.LogError(ex, "An error occurred while registering the user");
                 return new GenericResponse
                 {
                     StatusCode = 500,
-                    Message = "Something Went Wrong",
+                    Message = "Internal server error",
                 };
-                throw;
+            }
+        }
+        public async Task<GenericResponse> ConfirmOtp(ConfirmOtpDTO details)
+        {
+            var user = await _userManager.FindByEmailAsync(details.Email);
+            if (user == null)
+            {
+                return new GenericResponse
+                {
+                    StatusCode = 404,
+                    Message = "Invalid email address."
+                };
             }
 
-        }
-        public async Task UpdateUser(User user)
-        {
-            _context.Users.Update(user);
-            await _context.SaveChangesAsync();
-        }
-        public async Task<User> GetUser(string email)
-        {
-            var identityuser = await _userManager.FindByEmailAsync(email);
-            return identityuser;
-        }
+            var claims = await _userManager.GetClaimsAsync(user);
+            var otpCodeClaim = claims.FirstOrDefault(c => c.Type == "otp_code");
+            var otpExpirationClaim = claims.FirstOrDefault(c => c.Type == "otp_expiration");
 
-        public async Task<GenericResponse> RefreshToken(RefreshTokenModel model)
-        {
-            try
+            if (otpCodeClaim == null || otpExpirationClaim == null)
             {
-                var principal = GetTokenPrincipal(model.AccessToken);
-                var response = new RefreshResponse();
-
-                if (principal?.Identity?.Name is null)
+                return new GenericResponse
                 {
-                    return new GenericResponse
-                    {
-                        StatusCode = 403,
-                        Message = "Unauthorized operation"
-                    };
-                }
-                var userphone = principal.Identity.Name;
-                var identityUser = await _context.Users.Where(u => u.PhoneNumber == userphone).FirstOrDefaultAsync();
-
-                //if (identityUser is null || identityUser.RefreshToken != model.RefreshToken)
-                //{
-                //    return new GenericResponse
-                //    {
-                //        StatusCode = 401,
-                //        Message = "Invalid token"
-                //    };
-                //}
-                var roles = await _userManager.GetRolesAsync(identityUser);
-
-               
-                var phone = identityUser.PhoneNumber;
-                var accessToken = JwtService.GenerateAccessTokenAsync(phone, identityUser.Id, roles);
-                var refreshToken = JwtService.GenerateRefreshToken(phone);
-                //identityUser.RefreshToken = refreshToken;
-
-                await UpdateUser(identityUser);
-                var refreshResponse = new
-                {
-                    accessToken,
-                    refreshToken
+                    StatusCode = 400,
+                    Message = "Invalid OTP code"
                 };
+            }
+
+            var otpExpiration = DateTime.Parse(otpExpirationClaim.Value);
+            if (otpCodeClaim.Value == details.Otp && otpExpiration > DateTime.UtcNow)
+            {
+                user.EmailConfirmed = true;
+                await _userManager.UpdateAsync(user);
+                await _userManager.RemoveClaimsAsync(user, new List<Claim> { otpCodeClaim, otpExpirationClaim });
                 return new GenericResponse
                 {
                     StatusCode = 200,
-                    Message = "Successful",
-                    Result = refreshResponse
+                    Message = "Email confirmed successfully."
                 };
             }
-            catch (Exception ex)
+            if (otpCodeClaim.Value == details.Otp && otpExpiration < DateTime.UtcNow)
             {
-                _logger.LogInformation("Error from refreshToken: {msg}", ex.Message);
+                await _userManager.RemoveClaimsAsync(user, new List<Claim> { otpCodeClaim, otpExpirationClaim });
                 return new GenericResponse
                 {
-                    StatusCode = 500,
-                    Message = "Internal server error"
+                    StatusCode = 403,
+                    Message = "Expired Otp."
                 };
-                throw;
             }
-            
-
-            
-            
-        }
-
-        private ClaimsPrincipal GetTokenPrincipal(string accessToken)
-        {
-            var securitykey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWTKEY")));
-            var validation = new TokenValidationParameters
+            return new GenericResponse
             {
-                IssuerSigningKey = securitykey,
-                ValidateLifetime = true,
-                ValidateActor = true,
-                ValidateIssuer = true,
-                ValidIssuer = Environment.GetEnvironmentVariable("JWTISSUER"),
-                ValidateAudience = true,
-                ValidAudience = Environment.GetEnvironmentVariable("JWTAUDIENCE")
+                StatusCode = 400,
+                Message = "OTP confirmation not successful"
             };
-            try
-            {
-                return new JwtSecurityTokenHandler().ValidateToken(accessToken, validation, out _);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Token validation error: {ex.Message}");
-                return null;
-            }
         }
+
+
+        public async Task<GenericResponse> RefreshToken(string RefreshToken)
+        {
+            var principal = _jwtService.GetTokenPrincipal(RefreshToken);
+
+            if (principal is null)
+            {
+                return new GenericResponse
+                {
+                    StatusCode = 403,
+                    Message = "Error validating token"
+                };
+            }
+
+            var claimemail = principal?.FindFirst(ClaimTypes.Email)?.Value;
+
+            var identityUser = await _userManager.FindByEmailAsync(claimemail);
+
+            if (identityUser is null)
+            {
+                return new GenericResponse
+                {
+                    StatusCode = 404,
+                    Message = "User not found"
+                };
+            }
+
+            if (identityUser.RefreshTokenExpiry <= DateTime.UtcNow)
+            {
+                return new GenericResponse
+                {
+                    StatusCode = 401,
+                    Message = "Expired token"
+                };
+            }
+
+            var email = identityUser.Email;
+            LoginRequestDTO user = new LoginRequestDTO { Email = email };
+            var accessToken = await _jwtService.GenerateAccessTokenAsync(user.Email);
+            return new GenericResponse
+            {
+                StatusCode = 200,
+                Message = "Successful",
+                Result = accessToken
+            };
+
+        }
+
+
     }
 }

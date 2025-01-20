@@ -11,10 +11,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("b3d2ab56-7057-4730-9f3a-a0a8d54568bb")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("MekanikApi.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bc8dab2b7b85e4b7dafb6fc59c620ca9d908dbea")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+05529a5848eed72aa63125f2571a2128fcb2ea5b")]
 [assembly: System.Reflection.AssemblyProductAttribute("MekanikApi.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MekanikApi.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

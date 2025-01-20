@@ -1204,7 +1204,7 @@
       "projectName": "MekanikApi.Domain",
       "projectPath": "C:\\Users\\user\\Documents\\coding\\mekanikApi\\MekanikApi.Domain\\MekanikApi.Domain.csproj",
       "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\user\\Documents\\coding\\mekanikApi\\MekanikApi.Domain\\obj\\",
+      "outputPath": "C:\\Users\\user\\Documents\\coding\\MekanikApi\\MekanikApi.Domain\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
