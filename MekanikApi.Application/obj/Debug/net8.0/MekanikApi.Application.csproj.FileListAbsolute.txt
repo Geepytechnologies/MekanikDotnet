@@ -13,3 +13,4 @@ C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Application\obj\Debug\net8.
 C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Application\obj\Debug\net8.0\refint\MekanikApi.Application.dll
 C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Application\obj\Debug\net8.0\MekanikApi.Application.pdb
 C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Application\obj\Debug\net8.0\ref\MekanikApi.Application.dll
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Application\obj\Debug\net8.0\MekanikApi.Application.sourcelink.json

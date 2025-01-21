@@ -6,8 +6,8 @@ namespace MekanikApi.Application.DTOs.Auth.Requests
 {
     public class LoginRequestDTO
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public string? Email { get; set; }
+        public string? Password { get; set; }
 
         [Required]
         public string? PushToken { get; set; }

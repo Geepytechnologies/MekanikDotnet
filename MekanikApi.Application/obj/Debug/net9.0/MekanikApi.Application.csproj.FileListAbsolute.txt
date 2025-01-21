@@ -1,0 +1,16 @@
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Application\bin\Debug\net9.0\MekanikApi.Application.deps.json
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Application\bin\Debug\net9.0\MekanikApi.Application.dll
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Application\bin\Debug\net9.0\MekanikApi.Application.pdb
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Application\bin\Debug\net9.0\MekanikApi.Domain.dll
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Application\bin\Debug\net9.0\MekanikApi.Domain.pdb
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Application\obj\Debug\net9.0\MekanikApi.Application.csproj.AssemblyReference.cache
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Application\obj\Debug\net9.0\MekanikApi.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Application\obj\Debug\net9.0\MekanikApi.Application.AssemblyInfoInputs.cache
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Application\obj\Debug\net9.0\MekanikApi.Application.AssemblyInfo.cs
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Application\obj\Debug\net9.0\MekanikApi.Application.csproj.CoreCompileInputs.cache
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Application\obj\Debug\net9.0\MekanikApi.Application.sourcelink.json
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Application\obj\Debug\net9.0\MekanikA.E89FE82D.Up2Date
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Application\obj\Debug\net9.0\MekanikApi.Application.dll
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Application\obj\Debug\net9.0\refint\MekanikApi.Application.dll
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Application\obj\Debug\net9.0\MekanikApi.Application.pdb
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Application\obj\Debug\net9.0\ref\MekanikApi.Application.dll

@@ -18,7 +18,7 @@ namespace MekanikApi.Domain.GenericRepository
             return await _dbcontext.Set<T>().ToListAsync();
         }
 
-        public async Task<T> GetByIdAsync(Guid id)
+        public async Task<T?> GetByIdAsync(Guid id)
         {
             return await _dbcontext.Set<T>().FindAsync(id);
         }

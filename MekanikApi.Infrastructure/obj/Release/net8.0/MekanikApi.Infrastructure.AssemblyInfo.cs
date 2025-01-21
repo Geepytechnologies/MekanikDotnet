@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MekanikApi.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+05529a5848eed72aa63125f2571a2128fcb2ea5b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d2666272e95a8a6914fc09a728c300284240f68d")]
 [assembly: System.Reflection.AssemblyProductAttribute("MekanikApi.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MekanikApi.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

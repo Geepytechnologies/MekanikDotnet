@@ -8,7 +8,6 @@ namespace MekanikApi.Application.Interfaces
 {
     public interface IAuthService
     {
-        Task<GenericResponse> RefreshToken(string RefreshToken);
         Task<GenericResponse> Login(LoginRequestDTO user);
         Task<GenericResponse> RegisterUser(RegisterRequestDTO user);
 
@@ -16,6 +15,12 @@ namespace MekanikApi.Application.Interfaces
 
         Task<GenericResponse> ConfirmOtp(ConfirmOtpDTO details);
         Task<bool> SendVerificationCode(string email, string otp, string firstname);
+
+        Task<GenericResponse> RefreshToken(RefreshTokenModel model);
+
+        Task<GenericResponse> ForgotPassword(ForgotPasswordDTO user);
+
+        Task<GenericResponse> ResetPassword(ResetPasswordDTO user, string accessToken);
 
     }
 }

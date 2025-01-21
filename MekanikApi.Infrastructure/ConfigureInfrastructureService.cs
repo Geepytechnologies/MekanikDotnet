@@ -40,8 +40,12 @@ namespace MekanikApi.Infrastructure
                 options.Lockout.AllowedForNewUsers = true;
             }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
-            
-            
+
+            services.AddHttpClient("termii", httpClient =>
+            {
+                httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+                httpClient.BaseAddress = new Uri("https://v3.api.termii.com/");
+            });
 
             // Register other services and repositories
             services.AddScoped<IUserRepository, UserRepository>();

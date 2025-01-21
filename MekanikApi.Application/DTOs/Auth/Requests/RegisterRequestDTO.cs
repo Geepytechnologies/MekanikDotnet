@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using MekanikApi.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 
@@ -6,27 +7,22 @@ namespace MekanikApi.Application.DTOs.Auth.Requests
 {
     public class RegisterRequestDTO
     {
-        public string Firstname { get; set; }
-        public string Lastname { get; set; }
+        public string? Firstname { get; set; }
+        public string? Lastname { get; set; }
         public string? Middlename { get; set; }
 
-        //[RegularExpression(@"^\234\d*$", ErrorMessage = "Phone number is invalid")]
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
 
         [EmailAddress]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
-        public string? BusinessName { get; set; }
+        public string? PushToken { get; set; }
 
-        public string? Homeaddress { get; set; }
+        public ApplicationProfile Profile { get; set; }
 
-        [DataType(DataType.Date, ErrorMessage = "Invalid date format.")]
-        public DateOnly? DateOfBirth { get; set; }
-        public string? StateOfOrigin { get; set; }
-
-        public string? LGA { get; set; }
+    
     }
 
     public class RegisterRequestDTOValidator : AbstractValidator<RegisterRequestDTO>
@@ -55,19 +51,10 @@ namespace MekanikApi.Application.DTOs.Auth.Requests
             .Matches(@"\d").WithMessage("Password must contain at least one number.")
             .Matches(@"[\W_]").WithMessage("Password must contain at least one special character.");
 
-            RuleFor(user => user.Homeaddress)
-                .NotEmpty().WithMessage("Home Address is Required");
-            RuleFor(user => user.DateOfBirth)
-                .NotEmpty().WithMessage("Date of Birth is required")
-                .Must(BeAValidDate)
-            .WithMessage("Date must be in the format yyyy-MM-dd.");
-            RuleFor(user => user.StateOfOrigin)
-                .NotEmpty().WithMessage("State of Origin is Required");
-            RuleFor(user => user.LGA)
-                .NotEmpty().WithMessage("LGA is Required");
+            
         }
 
-        private bool NotContainWhitespace(string name)
+        private bool NotContainWhitespace(string? name)
         {
             return !string.IsNullOrWhiteSpace(name) && !name.Any(char.IsWhiteSpace);
         }

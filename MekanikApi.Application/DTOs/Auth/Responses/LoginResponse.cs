@@ -3,7 +3,7 @@
     public class LoginResponse
     {
         public bool Status { get; set; }
-        public string Message { get; set; }
+        public string? Message { get; set; }
         public UserLoginResponseDTO? UserDetails { get; set; }
         public UserNotVerifiedResponseDTO? UserNotVerifiedDetails { get; set; }
 

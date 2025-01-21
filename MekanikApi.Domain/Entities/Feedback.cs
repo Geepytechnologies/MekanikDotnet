@@ -10,15 +10,15 @@ namespace MekanikApi.Domain.Entities
     {
         public Guid Id { get; set; }
 
-        public string Message { get; set; }
+        public string? Message { get; set; }
 
         public Guid FromUserId { get; set; }
 
-        public User FromUser { get; set; }
+        public ApplicationUser? FromUser { get; set; }
 
         public Guid ToUserId { get; set; }
 
-        public User ToUser { get; set; }
+        public ApplicationUser? ToUser { get; set; }
 
         public DateTime CreatedAt { get; set; }
 

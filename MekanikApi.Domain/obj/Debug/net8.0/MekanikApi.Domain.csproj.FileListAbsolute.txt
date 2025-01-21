@@ -10,3 +10,5 @@ C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Domain\obj\Debug\net8.0\Mek
 C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Domain\obj\Debug\net8.0\refint\MekanikApi.Domain.dll
 C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Domain\obj\Debug\net8.0\MekanikApi.Domain.pdb
 C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Domain\obj\Debug\net8.0\ref\MekanikApi.Domain.dll
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Domain\obj\Debug\net8.0\EFCoreNpgsqlNetTopologySuite.cs
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Domain\obj\Debug\net8.0\MekanikApi.Domain.sourcelink.json

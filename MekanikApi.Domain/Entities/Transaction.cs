@@ -11,10 +11,12 @@ namespace MekanikApi.Domain.Entities
     public class Transaction
     {
         public Guid Id { get; set; }
-        public Guid OrderId { get; set; }
         public decimal Amount { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
         public TransactionStatus Status { get; set; }
         public DateTime TransactionDate { get; set; }
+
+        public Guid OrderId { get; set; } 
+        public Order? Order { get; set; }
     }
 }

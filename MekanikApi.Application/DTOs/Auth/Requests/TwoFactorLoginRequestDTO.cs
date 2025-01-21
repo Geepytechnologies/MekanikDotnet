@@ -5,16 +5,16 @@ namespace MekanikApi.Application.DTOs.Auth.Requests
     public class TwoFactorLoginRequestDTO
     {
         [Required]
-        public string PinId { get; set; }
+        public string? PinId { get; set; }
 
         [Required]
-        public string Otp { get; set; }
+        public string? Otp { get; set; }
 
         [Required]
-        public string MobileNumber { get; set; }
+        public string? MobileNumber { get; set; }
 
         [Required]
-        public string PushToken { get; set; }
+        public string? PushToken { get; set; }
 
     }
 }

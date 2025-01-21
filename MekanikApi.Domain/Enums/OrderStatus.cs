@@ -9,7 +9,7 @@ namespace MekanikApi.Domain.Enums
     public enum OrderStatus
     {
         Pending = 0,
-        Successful = 1,
-        Failed = 2,
+        Confirmed = 1,
+        Fulfilled = 2,
     }
 }

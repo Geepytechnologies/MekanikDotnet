@@ -9,18 +9,18 @@ namespace MekanikApi.Application.DTOs.Mechanic
 {
     public class CreateMechanicDTO
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
-        public string Address { get; set; }
+        public string? Address { get; set; }
 
         public int Experience { get; set; }
 
-        public int WorkDays { get; set; }
+        public DayOfWeek[]? WorkDays { get; set; }
 
         public double Latitude { get; set; }
 
         public double Longitude { get; set; }
 
-        public IFormFile Image { get; set; }
+        public string? Image { get; set; }
     }
 }

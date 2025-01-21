@@ -12,8 +12,8 @@ namespace MekanikApi.Domain.Entities
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-        public string Title { get; set; }
-        public string Body { get; set; }
+        public string? Title { get; set; }
+        public string? Body { get; set; }
 
         public NotificationStatus Status { get; set; } = NotificationStatus.Unread;
 

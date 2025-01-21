@@ -16,7 +16,7 @@ namespace MekanikApi.Application.Interfaces
 
         Task<GenericResponse> DeleteUserProfile(string accessToken);
 
-        GenericBoolResponse CheckIfCredentialsMatch(User userDetails, string phone, string firstname, string lastname);
+        GenericBoolResponse CheckIfCredentialsMatch(ApplicationUser userDetails, string phone, string firstname, string lastname);
 
         Task<bool> VerifyUserAsync(Guid userId);
 

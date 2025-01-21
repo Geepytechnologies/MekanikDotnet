@@ -1,8 +1,8 @@
 {
   "Version": 1,
-  "Hash": "MjSmkjb4lFfepkt2fww9MAweoOLkWMMkv9yRzVWulgY=",
-  "Source": "MekanikApi",
-  "BasePath": "_content/MekanikApi",
+  "Hash": "rxjh1KS/fyLFvt1MabPzhE8O7Ec+HfWCOT1dSF6A/Ng=",
+  "Source": "MekanikApi.Api",
+  "BasePath": "_content/MekanikApi.Api",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],

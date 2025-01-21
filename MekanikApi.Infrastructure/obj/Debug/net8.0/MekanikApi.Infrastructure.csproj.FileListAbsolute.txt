@@ -17,3 +17,5 @@ C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Infrastructure\obj\Debug\ne
 C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Infrastructure\obj\Debug\net8.0\MekanikApi.Infrastructure.pdb
 C:\Users\user\Documents\coding\MekanikApi\MekanikApi.Infrastructure\obj\Debug\net8.0\MekanikApi.Infrastructure.genruntimeconfig.cache
 C:\Users\user\Documents\coding\MekanikApi\MekanikApi.Infrastructure\obj\Debug\net8.0\ref\MekanikApi.Infrastructure.dll
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Infrastructure\obj\Debug\net8.0\EFCoreNpgsqlNetTopologySuite.cs
+C:\Users\user\Documents\coding\mekanikApi\MekanikApi.Infrastructure\obj\Debug\net8.0\MekanikApi.Infrastructure.sourcelink.json

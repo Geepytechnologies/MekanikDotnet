@@ -10,10 +10,10 @@ namespace MekanikApi.Domain.Entities
     {
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
-        public User User { get; set; }
+        public ApplicationUser? User { get; set; }
         public Guid ParticipantId { get; set; }
-        public User Participant { get; set; }
+        public ApplicationUser? Participant { get; set; }
         public DateTime CreatedAt { get; set; }
-        public ICollection<Message> Messages { get; set; }
+        public ICollection<Message> Messages { get; set; } = [];
     }
 }

@@ -7,19 +7,19 @@ using MimeKit.Text;
 
 namespace MekanikApi.Infrastructure.Services
 {
-    public class EmailService(IConfiguration emailConfig, ILogger<EmailService> logger)
+    public class EmailService(IConfiguration emailConfig, ILogger<EmailService> logger): IEmailService
     {
         private readonly IConfiguration _emailConfig = emailConfig;
         private readonly ILogger<EmailService> _logger = logger;
 
-        public async Task<bool> SendEmailAsync(string toEmail, string subject)
+        public async Task<bool> SendEmailAsync(string toEmail, string subject, string body)
         {
             try
             {
-                var body = await GetEmailBodyAsync("verification.html");
+                //var body = await GetEmailBodyAsync("verification.html");
 
                 var email = new MimeMessage();
-                email.From.Add(MailboxAddress.Parse(_emailConfig.GetSection("EmailConfiguration:From").Value));
+                email.From.Add(MailboxAddress.Parse(Environment.GetEnvironmentVariable("MAIL_ACCOUNT")));
                 email.To.Add(MailboxAddress.Parse(toEmail));
                 email.Subject = subject;
                 email.Body = new TextPart(TextFormat.Html)
@@ -28,8 +28,9 @@ namespace MekanikApi.Infrastructure.Services
                 };
 
                 using var smtp = new SmtpClient();
-                smtp.Connect(_emailConfig.GetSection("EmailConfiguration:SmtpServer").Value, 465, SecureSocketOptions.SslOnConnect);
-                smtp.Authenticate(_emailConfig.GetSection("EmailConfiguration:Username").Value, _emailConfig.GetSection("EmailConfiguration:Password").Value);
+                smtp.ServerCertificateValidationCallback = (s, c, h, e) => true;
+                smtp.Connect(Environment.GetEnvironmentVariable("MAIL_SERVER"), 465, SecureSocketOptions.SslOnConnect);
+                smtp.Authenticate(Environment.GetEnvironmentVariable("MAIL_USERNAME"), Environment.GetEnvironmentVariable("MAIL_PASSWORD"));
                 smtp.Send(email);
                 smtp.Disconnect(true);
 

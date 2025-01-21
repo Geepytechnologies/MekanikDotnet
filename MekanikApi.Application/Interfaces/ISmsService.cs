@@ -9,8 +9,7 @@ namespace MekanikApi.Application.Interfaces
 
         Task<SmsResponse> SendForgotAccountPinOtp(string phone);
 
-        Task<OtpVerificationResponse> VerifyOTP(ConfirmOtpDTO request);
+        
 
-        Task<SmsResponse> VoiceOTP(VoiceOtpDTO request);
     }
 }

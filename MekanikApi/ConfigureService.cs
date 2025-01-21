@@ -122,12 +122,15 @@ namespace MekanikApi.Api
             services.AddHttpContextAccessor();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ISmsService, SmsService>();
-            
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<ICacheService, CacheService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IEncryptionService, EncryptionService>();
-            
+            services.AddScoped<IConversationService, ConversationService>();
+            services.AddScoped<IMechanicService, MechanicService>();
+            services.AddScoped<IEmailService, EmailService>();
+
             services.AddScoped<FileService>();
 
 

@@ -3,8 +3,8 @@ using MekanikApi.Domain.Entities;
 
 namespace MekanikApi.Domain.Interfaces
 {
-    public interface IUserRepository : IGenericRepository<User>
+    public interface IUserRepository : IGenericRepository<ApplicationUser>
     {
-        Task<User> GetByPhoneNumberAsync(string phoneNumber);
+        Task<ApplicationUser?> GetByPhoneNumberAsync(string phoneNumber);
     }
 }

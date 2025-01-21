@@ -6,7 +6,7 @@ using MekanikApi.Infrastructure.DataContext;
 
 namespace MekanikApi.Infrastructure.Repository
 {
-    public class UserRepository : GenericRepository<User>, IUserRepository
+    public class UserRepository : GenericRepository<ApplicationUser>, IUserRepository
     {
         private readonly ApplicationDbContext _dbcontext;
 
@@ -15,7 +15,7 @@ namespace MekanikApi.Infrastructure.Repository
             _dbcontext = dbcontext;
         }
 
-        public async Task<User> GetByPhoneNumberAsync(string phoneNumber)
+        public async Task<ApplicationUser?> GetByPhoneNumberAsync(string phoneNumber)
         {
             return await _dbcontext.Users.SingleOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
         }

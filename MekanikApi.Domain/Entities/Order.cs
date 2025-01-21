@@ -21,8 +21,12 @@ namespace MekanikApi.Domain.Entities
 
         public DeliveryMethod DeliveryMethod { get; set; }
 
+        public Guid ChatConversationId { get; set; }
+
         // Navigation property to OrderItems
-        public ICollection<OrderItem> OrderItems { get; set; }
+        public ICollection<OrderItem> OrderItems { get; set; } = [];
+
+        public ICollection<Transaction> Transactions { get; set; } = [];
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
