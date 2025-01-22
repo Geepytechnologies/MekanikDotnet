@@ -129,6 +129,7 @@ namespace MekanikApi.Api
             services.AddScoped<IEncryptionService, EncryptionService>();
             services.AddScoped<IConversationService, ConversationService>();
             services.AddScoped<IMechanicService, MechanicService>();
+            services.AddScoped<IVendorService, VendorService>();
             services.AddScoped<IEmailService, EmailService>();
 
             services.AddScoped<FileService>();

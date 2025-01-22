@@ -1,6 +1,8 @@
-﻿using MekanikApi.Application.DTOs.Common;
+﻿using MekanikApi.Api.Extensions;
+using MekanikApi.Application.DTOs.Common;
 using MekanikApi.Application.DTOs.Mechanic;
 using MekanikApi.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -19,12 +21,14 @@ namespace MekanikApi.Api.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         [HttpPost("CreateProfile")]
         public async Task<IActionResult> CreateMechanicProfile([FromForm] CreateMechanicDTO details)
         {
             try
             {
-                var result = await _mechanicService.CreateMechanicProfile(details);
+                var accessToken = HttpContext.GetAuthorizationHeader();
+                var result = await _mechanicService.CreateMechanicProfile(details, accessToken);
                 return StatusCode(result.StatusCode, new ApiResponse
                 {
                     StatusCode = result.StatusCode,

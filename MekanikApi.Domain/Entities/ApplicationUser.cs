@@ -12,7 +12,6 @@ namespace MekanikApi.Domain.Entities
 {
     public class ApplicationUser : IdentityUser<Guid>
     {
-        public Guid Id { get; set; }
         public required string Firstname { get; set; }
         public required string Lastname { get; set; }
         public string? Middlename { get; set; }

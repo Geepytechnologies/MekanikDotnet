@@ -10,7 +10,7 @@ namespace MekanikApi.Application.Interfaces
 {
     public interface IMechanicService
     {
-        Task<GenericResponse> CreateMechanicProfile(CreateMechanicDTO details);
+        Task<GenericResponse> CreateMechanicProfile(CreateMechanicDTO details, string accessToken);
 
         Task<GenericResponse> GetAllMechanics();
 

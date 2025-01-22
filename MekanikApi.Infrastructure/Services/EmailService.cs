@@ -19,7 +19,7 @@ namespace MekanikApi.Infrastructure.Services
                 //var body = await GetEmailBodyAsync("verification.html");
 
                 var email = new MimeMessage();
-                email.From.Add(MailboxAddress.Parse(Environment.GetEnvironmentVariable("MAIL_ACCOUNT")));
+                email.From.Add(new MailboxAddress("Mekanik", Environment.GetEnvironmentVariable("MAIL_ACCOUNT")));
                 email.To.Add(MailboxAddress.Parse(toEmail));
                 email.Subject = subject;
                 email.Body = new TextPart(TextFormat.Html)

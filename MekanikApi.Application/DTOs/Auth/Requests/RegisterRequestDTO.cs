@@ -31,8 +31,8 @@ namespace MekanikApi.Application.DTOs.Auth.Requests
         {
             RuleFor(user => user.PhoneNumber)
                 .NotEmpty().WithMessage("Phone number is required.")
-                .Length(13).WithMessage("Phone number must be between 13 characters.")
-                .Matches(@"^234").WithMessage("Phone number must start with '234'.")
+                .Length(11).WithMessage("Phone number must be between 11 characters.")
+                //.Matches(@"^234").WithMessage("Phone number must start with '234'.")
                 .Must(NotContainWhitespace).WithMessage("Phone number cannot contain whitespace.");
 
             RuleFor(user => user.Firstname)

@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="EmailTemplates\" />
     <Folder Include="Extensions\" />
     <Folder Include="Data\" />
   </ItemGroup>

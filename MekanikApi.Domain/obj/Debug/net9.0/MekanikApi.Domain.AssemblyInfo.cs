@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MekanikApi.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d2666272e95a8a6914fc09a728c300284240f68d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b911c41004be96dbed444de6e4cae5d23fc1e7c9")]
 [assembly: System.Reflection.AssemblyProductAttribute("MekanikApi.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MekanikApi.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

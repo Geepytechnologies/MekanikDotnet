@@ -4,10 +4,9 @@ using MekanikApi.Application.Interfaces;
 using MekanikApi.Domain.Entities;
 using MekanikApi.Infrastructure.DataContext;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using NetTopologySuite;
 using NetTopologySuite.Geometries;
+using NetTopologySuite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,20 +16,22 @@ using System.Threading.Tasks;
 
 namespace MekanikApi.Infrastructure.Services
 {
-    public class MechanicService : IMechanicService
+    public class VendorService: IVendorService
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
-        private readonly ILogger<MechanicService> _logger;
+        private readonly ILogger<VendorService> _logger;
         private readonly IJwtService _jwtService;
-        public MechanicService(ApplicationDbContext context, ILogger<MechanicService> logger, IJwtService jwtService, UserManager<ApplicationUser> userManager)
+
+        public VendorService(ApplicationDbContext context, ILogger<VendorService> logger, IJwtService jwtService, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _logger = logger;
             _jwtService = jwtService;
             _userManager = userManager;
         }
-        public async Task<GenericResponse> CreateMechanicProfile(CreateMechanicDTO details, string accessToken)
+
+        public async Task<GenericResponse> CreateVendorProfile(CreateMechanicDTO details, string accessToken)
         {
             try
             {
@@ -58,28 +59,6 @@ namespace MekanikApi.Infrastructure.Services
                     };
                 }
                 var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326);
-                var uploadedImageUrl = "";
-                var uploadedImageId = "";
-                if (details.Image != null)
-                {
-                    var uploadResult = FileService.UploadImageToCloudinary(details.Image);
-                    if (uploadResult.StatusCode == 200)
-                    {
-                        uploadedImageUrl = (string)uploadResult.Result.Url;
-                        uploadedImageId = uploadResult.Result.Id;
-                        
-
-                    }
-
-                }
-
-                var vehicleSpecializations = await _context.VehicleBrands
-            .Where(v => details.VehicleSpecialization.Contains(v.Id))
-                .ToListAsync();
-
-                var serviceSpecializations = await _context.Services
-                    .Where(s => details.ServiceSpecialization.Contains(s.Id))
-                    .ToListAsync();
                 var newMechanic = new Mechanic
                 {
                     UserId = identityUser.Id,
@@ -87,12 +66,8 @@ namespace MekanikApi.Infrastructure.Services
                     Address = details.Address,
                     Experience = details.Experience,
                     WorkDays = details.WorkDays,
-                    StartHour = details.StartHour,
-                    StartMeridien = details.StartMeridien,
-                    EndHour = details.EndHour,
-                    EndMeridien = details.EndMeridien,
                     Location = geometryFactory.CreatePoint(new Coordinate(details.Longitude, details.Latitude)),
-                    Image = uploadedImageUrl
+                    Image = details.Image
                 };
                 await _context.Mechanics.AddAsync(newMechanic);
                 await _context.SaveChangesAsync();
@@ -100,37 +75,36 @@ namespace MekanikApi.Infrastructure.Services
                 return new GenericResponse
                 {
                     StatusCode = 201,
-                    Message = "Mechanic profile created successfully",
+                    Message = "Vendor profile created successfully",
                 };
 
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error creating mechanic profile: {msg}", ex.Message);
+                _logger.LogError("Error creating vendor profile: {msg}", ex.Message);
                 return new GenericResponse
                 {
                     StatusCode = 500,
-                    Message = "Error creating mechanic profile",
+                    Message = "Error creating vendor profile",
                 };
                 throw;
             }
         }
 
-        public async Task<GenericResponse> FindMechanicsNearMe(double latitude, double longitude)
+        public async Task<GenericResponse> FindVendorsNearMe(double latitude, double longitude)
         {
             try
             {
                 var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326);
                 var myLocation = geometryFactory.CreatePoint(new Coordinate(longitude, latitude));
-                var mechanics = _context.Mechanics
+                var vendors = _context.Vendors
                     .OrderBy(m => m.Location.Distance(myLocation))
                     .Where(m => m.Location.IsWithinDistance(myLocation, 2000))
                     .Select(m => new
                     {
                         m.Name,
                         m.Address,
-                        m.Experience,
-                        m.WorkDays,
+                        m.Image,
                         Distance = m.Location.Distance(myLocation)
                     })
                     .ToList();
@@ -138,50 +112,51 @@ namespace MekanikApi.Infrastructure.Services
                 return new GenericResponse
                 {
                     StatusCode = 200,
-                    Message = "Mechanics near you retrieved successfully",
-                    Result = mechanics
+                    Message = "vendors near you retrieved successfully",
+                    Result = vendors
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error getting mechanics near you: {msg}", ex.Message);
+                _logger.LogError("Error getting vendors near you: {msg}", ex.Message);
                 return new GenericResponse
                 {
                     StatusCode = 500,
-                    Message = "Error getting mechanics near you",
+                    Message = "Error getting vendors near you",
                 };
                 throw;
             }
         }
 
-        public async Task<GenericResponse> GetAllMechanics()
+        public async Task<GenericResponse> GetAllVendors()
         {
             try
             {
-                var mechanics = await _context.Mechanics.FindAsync();
+                var mechanics = await _context.Vendors.FindAsync();
 
                 return new GenericResponse
                 {
                     StatusCode = 200,
-                    Message = "Mechanics retrieved successfully",
+                    Message = "Vendors retrieved successfully",
                     Result = mechanics
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error retrieving mechanics: {msg}", ex.Message);
+                _logger.LogError("Error retrieving vendors: {msg}", ex.Message);
                 return new GenericResponse
                 {
                     StatusCode = 500,
-                    Message = "Error retrieving mechanics",
+                    Message = "Error retrieving vendors",
                 };
                 throw;
             }
         }
 
-        public Task<GenericResponse> GetMechanicProfile(Guid mechanicId)
+        public Task<GenericResponse> GetVendorProfile(Guid vendorId)
         {
             throw new NotImplementedException();
         }
     }
 }
+

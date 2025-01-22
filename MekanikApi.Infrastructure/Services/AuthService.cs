@@ -20,6 +20,7 @@ using System.Text.Json;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Google.Apis.Auth;
 using System.Security.Cryptography;
+using MekanikApi.Domain.Enums;
 
 namespace MekanikApi.Infrastructure.Services
 {
@@ -32,8 +33,10 @@ namespace MekanikApi.Infrastructure.Services
         private readonly IEmailService _emailService;
         private readonly IJwtService _jwtService;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<IdentityRole<Guid>> _roleManager;
 
-        public AuthService(UserManager<ApplicationUser> userManager, IConfiguration config, ILogger<AuthService> logger, ICacheService cacheService, IEmailService emailService, IJwtService jwtService, SignInManager<ApplicationUser> signInManager)
+
+        public AuthService(UserManager<ApplicationUser> userManager, IConfiguration config, ILogger<AuthService> logger, ICacheService cacheService, IEmailService emailService, IJwtService jwtService, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole<Guid>> roleManager)
         {
             _userManager = userManager;
             _config = config;
@@ -42,6 +45,7 @@ namespace MekanikApi.Infrastructure.Services
             _emailService = emailService;
             _jwtService = jwtService;
             _signInManager = signInManager;
+            _roleManager = roleManager;
         }
         private static string GenerateOtp()
         {
@@ -83,7 +87,7 @@ namespace MekanikApi.Infrastructure.Services
         {
             var body = await EmailService.GetEmailBodyAsync("verification.html");
             var emailbody = body.Replace("{{OTP_CODE}}", otp).Replace("{{NAME}}", firstname);
-            var result = await _emailService.SendEmailAsync(email, "Clusstr Account Verification", emailbody);
+            var result = await _emailService.SendEmailAsync(email, "Mekanik Verification", emailbody);
             return result;
         }
         public async Task<GenericResponse> Login(LoginRequestDTO user)
@@ -118,8 +122,15 @@ namespace MekanikApi.Infrastructure.Services
                     var tokenstring = JwtService.GenerateAccessTokenAsync(user.Email, identityuser.Id, roles);
                     var refreshToken = JwtService.GenerateRefreshToken(user.Email);
                     var hashedRefreshToken = HashValue(refreshToken);
+                    var storeTokenResult = await _userManager.SetAuthenticationTokenAsync(
+                        _applicationUser,
+                        "Local",
+                        "RefreshToken",
+                        refreshToken
+                    );
+
                     _applicationUser.RefreshToken = hashedRefreshToken;
-                    _applicationUser.RefreshTokenExpiry = DateTime.Now.AddHours(2);
+                    //_applicationUser.RefreshTokenExpiry = DateTime.Now.AddHours(2);
 
                     await _userManager.UpdateAsync(_applicationUser);
 
@@ -219,7 +230,6 @@ namespace MekanikApi.Infrastructure.Services
                 {
                     UserName = user.Email,
                     Email = user.Email,
-                    NormalizedEmail = _userManager.NormalizeEmail(user.Email),
                     Firstname = user.Firstname,
                     Middlename = user.Middlename,
                     Lastname = user.Lastname,
@@ -234,9 +244,17 @@ namespace MekanikApi.Infrastructure.Services
 
                 if (result.Succeeded)
                 {
-                    
-                    
+                    var savedUser = await _userManager.FindByEmailAsync(user.Email);
+                    if (savedUser != null)
+                    {
+                        if (!await _roleManager.RoleExistsAsync("User"))
+                        {
+                            var role = new IdentityRole<Guid> { Name = "User" };
+                            await _roleManager.CreateAsync(role);
+                        }
+                        await _userManager.AddToRoleAsync(savedUser, "User");
 
+                    }
                     return new GenericResponse
                     {
                         StatusCode = 201,
@@ -415,8 +433,9 @@ namespace MekanikApi.Infrastructure.Services
                 }
                 var email = principal.Identity.Name;
                 var identityUser = await _userManager.FindByEmailAsync(email);
+                var storedHashedToken = await _userManager.GetAuthenticationTokenAsync(identityUser, "Local", "RefreshToken");
 
-                if (identityUser is null || identityUser.RefreshToken != model.RefreshToken)
+                if (identityUser is null || storedHashedToken is null || storedHashedToken != HashValue(model.RefreshToken))
                 {
                     return new GenericResponse
                     {

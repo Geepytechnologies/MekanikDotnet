@@ -17,10 +17,21 @@ namespace MekanikApi.Application.DTOs.Mechanic
 
         public DayOfWeek[]? WorkDays { get; set; }
 
+        public int StartHour { get; set; }
+
+        public string? StartMeridien { get; set; }
+
+        public int EndHour { get; set; }
+
+        public string? EndMeridien { get; set; }
+
         public double Latitude { get; set; }
 
         public double Longitude { get; set; }
 
-        public string? Image { get; set; }
+        public IFormFile? Image { get; set; }
+
+        public Guid[]? VehicleSpecialization { get; set; } 
+        public Guid[]? ServiceSpecialization { get; set; }
     }
 }
