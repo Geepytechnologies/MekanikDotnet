@@ -50,7 +50,7 @@ namespace MekanikApi.Infrastructure.Services
         private static string GenerateOtp()
         {
             Random random = new();
-            return random.Next(100000, 999999).ToString();
+            return random.Next(1000, 9999).ToString();
         }
         private static string HashValue(string value)
         {

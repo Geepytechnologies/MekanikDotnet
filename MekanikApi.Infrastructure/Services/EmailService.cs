@@ -58,7 +58,8 @@ namespace MekanikApi.Infrastructure.Services
 
         public static async Task<string> GetEmailBodyAsync(string templateFileName)
         {
-            var templatePath = Path.Combine("EmailTemplates", templateFileName);
+            var currentDirectory = Directory.GetCurrentDirectory();
+            var templatePath = Path.Combine(currentDirectory, "EmailTemplates", templateFileName);
 
             if (File.Exists(templatePath))
             {
