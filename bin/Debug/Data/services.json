@@ -1,0 +1,22 @@
+[
+  {
+    "Name": "Maintenance service",
+    "Description": "Regular servicing to keep vehicles in optimal condition."
+  },
+  {
+    "Name": "Repair service",
+    "Description": "Fixing mechanical and operational issues in vehicles."
+  },
+  {
+    "Name": "Diagnostic and inspection service",
+    "Description": "Identifying issues through thorough checks and diagnostics."
+  },
+  {
+    "Name": "Electrical system service",
+    "Description": "Servicing and repairing vehicle electrical components."
+  },
+  {
+    "Name": "Towing service",
+    "Description": "Transporting disabled vehicles to a repair facility."
+  }
+]
