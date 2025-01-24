@@ -15,7 +15,7 @@ COPY ["./MekanikApi.Domain/MekanikApi.Domain.csproj", "MekanikApi.Domain/"]
 COPY ["./MekanikApi.Infrastructure/MekanikApi.Infrastructure.csproj", "MekanikApi.Infrastructure/"]
 RUN dotnet restore "./MekanikApi/MekanikApi.Api.csproj"
 COPY . .
-WORKDIR "/src/MekanikApi.Api"
+WORKDIR "/src/MekanikApi"
 RUN dotnet build "MekanikApi.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
