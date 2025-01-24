@@ -30,6 +30,7 @@
   <ItemGroup>
     <Folder Include="Extensions\" />
     <Folder Include="Data\" />
+	<Folder Include="EmailTemplates\" />
   </ItemGroup>
 
 </Project>
