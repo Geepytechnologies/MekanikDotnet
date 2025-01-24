@@ -9,11 +9,11 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["./MekanikApi.Api/MekanikApi.Api.csproj", "MekanikApi.Api/"]
+COPY ["./MekanikApi/MekanikApi.Api.csproj", "MekanikApi/"]
 COPY ["./MekanikApi.Application/MekanikApi.Application.csproj", "MekanikApi.Application/"]
 COPY ["./MekanikApi.Domain/MekanikApi.Domain.csproj", "MekanikApi.Domain/"]
 COPY ["./MekanikApi.Infrastructure/MekanikApi.Infrastructure.csproj", "MekanikApi.Infrastructure/"]
-RUN dotnet restore "./MekanikApi.Api/MekanikApi.Api.csproj"
+RUN dotnet restore "./MekanikApi/MekanikApi.Api.csproj"
 COPY . .
 WORKDIR "/src/MekanikApi.Api"
 RUN dotnet build "./MekanikApi.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
