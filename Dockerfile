@@ -16,11 +16,11 @@ COPY ["./MekanikApi.Infrastructure/MekanikApi.Infrastructure.csproj", "MekanikAp
 RUN dotnet restore "./MekanikApi/MekanikApi.Api.csproj"
 COPY . .
 WORKDIR "/src/MekanikApi.Api"
-RUN dotnet build "./MekanikApi.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "MekanikApi.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./MekanikApi.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "MekanikApi.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
