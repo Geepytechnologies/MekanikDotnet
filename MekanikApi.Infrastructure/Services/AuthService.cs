@@ -126,7 +126,7 @@ namespace MekanikApi.Infrastructure.Services
                         _applicationUser,
                         "Local",
                         "RefreshToken",
-                        refreshToken
+                        hashedRefreshToken
                     );
 
                     _applicationUser.RefreshToken = hashedRefreshToken;

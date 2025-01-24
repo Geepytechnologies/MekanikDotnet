@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MekanikApi.Application.DTOs.Common;
+using MekanikApi.Application.Interfaces;
+using MekanikApi.Infrastructure.Services;
+using Microsoft.AspNetCore.Mvc;
 
 
 
@@ -8,11 +11,37 @@ namespace MekanikApi.Api.Controllers
     [ApiController]
     public class ServiceController : ControllerBase
     {
-        // GET: api/<ServiceSpecializationController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IServSpecializationService _servSpecializationService;
+        private readonly ILogger<ServiceController> _logger;
+        public ServiceController(IServSpecializationService servSpecializationService, ILogger<ServiceController> logger)
         {
-            return new string[] { "value1", "value2" };
+            _servSpecializationService = servSpecializationService;
+            _logger = logger;
+        }
+
+
+        [HttpGet("specializations")]
+        public async Task<IActionResult> GetAllMechanics()
+        {
+            try
+            {
+                var result = await _servSpecializationService.GetServiceSpecializations();
+                return StatusCode(result.StatusCode, new ApiResponse
+                {
+                    StatusCode = result.StatusCode,
+                    Message = result.Message,
+                    Result = result.Result
+                });
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse
+                {
+                    StatusCode = 500,
+                    Message = "Internal Server Error",
+                });
+                throw;
+            }
         }
 
         // GET api/<ServiceSpecializationController>/5

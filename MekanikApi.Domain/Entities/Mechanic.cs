@@ -41,6 +41,7 @@ namespace MekanikApi.Domain.Entities
         //A verified badge mechanic(Premium) or Not Verified badge (Basic)
         public MechanicUserType UserType { get; set; } = MechanicUserType.Basic;
 
+        //NIN/BVN
         public VerificationStatus VerificationStatus { get; set; } = VerificationStatus.NotVerified;
 
         public Point? Location { get; set; }

@@ -50,7 +50,7 @@ namespace MekanikApi.Infrastructure.Services
             var signingCred = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
             var securityToken = new JwtSecurityToken(
                 claims: claims,
-                 expires: DateTime.UtcNow.AddMinutes(3),
+                 expires: DateTime.UtcNow.AddDays(1),
                  issuer: Environment.GetEnvironmentVariable("JWTISSUER"),
                  audience: Environment.GetEnvironmentVariable("JWTAUDIENCE"),
                  signingCredentials: signingCred
@@ -77,7 +77,7 @@ namespace MekanikApi.Infrastructure.Services
             var signingCred = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
             var securityToken = new JwtSecurityToken(
                 claims: claims,
-                 expires: DateTime.UtcNow.AddMinutes(1),
+                 expires: DateTime.UtcNow.AddHours(1),
                  issuer: Environment.GetEnvironmentVariable("JWTISSUER"),
                  audience: Environment.GetEnvironmentVariable("JWTAUDIENCE"),
                  signingCredentials: signingCred

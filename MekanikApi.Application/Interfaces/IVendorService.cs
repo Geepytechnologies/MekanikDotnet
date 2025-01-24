@@ -1,5 +1,6 @@
 ﻿using MekanikApi.Application.DTOs.Common;
 using MekanikApi.Application.DTOs.Mechanic;
+using MekanikApi.Application.DTOs.Vendor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace MekanikApi.Application.Interfaces
 {
     public interface IVendorService
     {
-        Task<GenericResponse> CreateVendorProfile(CreateMechanicDTO details, string accessToken);
+        Task<GenericResponse> CreateVendorProfile(CreateVendorDTO details, string accessToken);
 
         Task<GenericResponse> GetAllVendors();
 

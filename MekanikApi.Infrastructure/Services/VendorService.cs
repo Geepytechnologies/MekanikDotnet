@@ -13,6 +13,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using MekanikApi.Application.DTOs.Vendor;
+using Microsoft.EntityFrameworkCore;
 
 namespace MekanikApi.Infrastructure.Services
 {
@@ -31,7 +33,7 @@ namespace MekanikApi.Infrastructure.Services
             _userManager = userManager;
         }
 
-        public async Task<GenericResponse> CreateVendorProfile(CreateMechanicDTO details, string accessToken)
+        public async Task<GenericResponse> CreateVendorProfile(CreateVendorDTO details, string accessToken)
         {
             try
             {
@@ -59,15 +61,27 @@ namespace MekanikApi.Infrastructure.Services
                     };
                 }
                 var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326);
+                var uploadedImageUrl = "";
+                var uploadedImageId = "";
+                if (details.Image != null)
+                {
+                    var uploadResult = FileService.UploadImageToCloudinary(details.Image);
+                    if (uploadResult.StatusCode == 200)
+                    {
+                        uploadedImageUrl = (string)uploadResult.Result.Url;
+                        uploadedImageId = uploadResult.Result.Id;
+
+
+                    }
+
+                }
                 var newMechanic = new Mechanic
                 {
                     UserId = identityUser.Id,
                     Name = details.Name,
                     Address = details.Address,
-                    Experience = details.Experience,
-                    WorkDays = details.WorkDays,
                     Location = geometryFactory.CreatePoint(new Coordinate(details.Longitude, details.Latitude)),
-                    Image = details.Image
+                    Image = uploadedImageUrl
                 };
                 await _context.Mechanics.AddAsync(newMechanic);
                 await _context.SaveChangesAsync();
@@ -132,7 +146,7 @@ namespace MekanikApi.Infrastructure.Services
         {
             try
             {
-                var mechanics = await _context.Vendors.FindAsync();
+                var mechanics = await _context.Vendors.ToListAsync();
 
                 return new GenericResponse
                 {

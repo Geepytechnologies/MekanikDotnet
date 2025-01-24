@@ -24,6 +24,7 @@ builder.Services.AddControllers(options =>
 }).AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals;
 });
 builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -39,6 +40,7 @@ using (var scope = app.Services.CreateScope())
 
     _ = RoleSeeder.Seed(services);
     VehicleBrandSeeder.Seed(services);
+    ServiceSpecializationSeeder.Seed(services);
 }
 
 // Configure the HTTP request pipeline.

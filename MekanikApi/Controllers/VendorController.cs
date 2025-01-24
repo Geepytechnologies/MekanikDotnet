@@ -1,11 +1,11 @@
 ﻿using MekanikApi.Api.Extensions;
 using MekanikApi.Application.DTOs.Common;
 using MekanikApi.Application.DTOs.Mechanic;
+using MekanikApi.Application.DTOs.Vendor;
 using MekanikApi.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace MekanikApi.Api.Controllers
 {
@@ -23,7 +23,7 @@ namespace MekanikApi.Api.Controllers
 
         [Authorize]
         [HttpPost("CreateProfile")]
-        public async Task<IActionResult> CreateVendorProfile([FromForm] CreateMechanicDTO details)
+        public async Task<IActionResult> CreateVendorProfile([FromForm] CreateVendorDTO details)
         {
             try
             {

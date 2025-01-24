@@ -121,18 +121,20 @@ namespace MekanikApi.Api
             });
             services.AddHttpContextAccessor();
             services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<ISmsService, SmsService>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<ICacheService, CacheService>();
-            services.AddScoped<IRoleService, RoleService>();
-            services.AddScoped<IEncryptionService, EncryptionService>();
             services.AddScoped<IConversationService, ConversationService>();
-            services.AddScoped<IMechanicService, MechanicService>();
-            services.AddScoped<IVendorService, VendorService>();
+            services.AddScoped<IEncryptionService, EncryptionService>();
             services.AddScoped<IEmailService, EmailService>();
-
             services.AddScoped<FileService>();
+            services.AddScoped<IJwtService, JwtService>();
+            services.AddScoped<IMechanicService, MechanicService>();
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<ISmsService, SmsService>();
+            services.AddScoped<IServSpecializationService, ServSpecializationService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IVehicleService, VehicleService>();
+            services.AddScoped<IVendorService, VendorService>();
+
 
 
             return services;

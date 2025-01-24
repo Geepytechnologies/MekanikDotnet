@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MekanikApi.Application.DTOs.Common;
+using MekanikApi.Application.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,11 +10,36 @@ namespace MekanikApi.Api.Controllers
     [ApiController]
     public class VehicleController : ControllerBase
     {
-        // GET: api/<VehicleController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IVehicleService _vehicleService;
+        private readonly ILogger<VehicleController> _logger;
+        public VehicleController(IVehicleService vehicleService, ILogger<VehicleController> logger)
         {
-            return new string[] { "value1", "value2" };
+            _vehicleService = vehicleService;
+            _logger = logger;
+        }
+
+        [HttpGet("specializations")]
+        public async Task<IActionResult> GetAllVehicleSpecializations()
+        {
+            try
+            {
+                var result = await _vehicleService.GetVehicleSpecializations();
+                return StatusCode(result.StatusCode, new ApiResponse
+                {
+                    StatusCode = result.StatusCode,
+                    Message = result.Message,
+                    Result = result.Result
+                });
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse
+                {
+                    StatusCode = 500,
+                    Message = "Internal Server Error",
+                });
+                throw;
+            }
         }
 
         // GET api/<VehicleController>/5

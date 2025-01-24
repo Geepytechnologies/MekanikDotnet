@@ -397,6 +397,26 @@
         "IsRequired": false
       },
       {
+        "Name": "StartHour",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "StartMeridien",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "EndHour",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "EndMeridien",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
         "Name": "Latitude",
         "Type": "System.Double",
         "IsRequired": false
@@ -408,7 +428,22 @@
       },
       {
         "Name": "Image",
-        "Type": "System.String",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "UserId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleSpecialization",
+        "Type": "System.Guid[]",
+        "IsRequired": false
+      },
+      {
+        "Name": "ServiceSpecialization",
+        "Type": "System.Guid[]",
         "IsRequired": false
       }
     ],
@@ -650,26 +685,6 @@
   },
   {
     "ContainingType": "MekanikApi.Api.Controllers.ServiceController",
-    "Method": "Get",
-    "RelativePath": "api/Service",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "MekanikApi.Api.Controllers.ServiceController",
     "Method": "Post",
     "RelativePath": "api/Service",
     "HttpMethod": "POST",
@@ -764,6 +779,16 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "MekanikApi.Api.Controllers.ServiceController",
+    "Method": "GetAllMechanics",
+    "RelativePath": "api/Service/specializations",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "MekanikApi.Api.Controllers.TransactionController",
@@ -1001,26 +1026,6 @@
   },
   {
     "ContainingType": "MekanikApi.Api.Controllers.VehicleController",
-    "Method": "Get",
-    "RelativePath": "api/Vehicle",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "MekanikApi.Api.Controllers.VehicleController",
     "Method": "Post",
     "RelativePath": "api/Vehicle",
     "HttpMethod": "POST",
@@ -1115,6 +1120,16 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "MekanikApi.Api.Controllers.VehicleController",
+    "Method": "GetAllVehicleSpecializations",
+    "RelativePath": "api/Vehicle/specializations",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "MekanikApi.Api.Controllers.VendorController",
@@ -1194,16 +1209,6 @@
         "IsRequired": false
       },
       {
-        "Name": "Experience",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "WorkDays",
-        "Type": "System.DayOfWeek[]",
-        "IsRequired": false
-      },
-      {
         "Name": "Latitude",
         "Type": "System.Double",
         "IsRequired": false
@@ -1215,7 +1220,7 @@
       },
       {
         "Name": "Image",
-        "Type": "System.String",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
         "IsRequired": false
       }
     ],

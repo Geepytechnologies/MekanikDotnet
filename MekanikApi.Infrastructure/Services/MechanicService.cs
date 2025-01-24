@@ -92,7 +92,10 @@ namespace MekanikApi.Infrastructure.Services
                     EndHour = details.EndHour,
                     EndMeridien = details.EndMeridien,
                     Location = geometryFactory.CreatePoint(new Coordinate(details.Longitude, details.Latitude)),
-                    Image = uploadedImageUrl
+                    Image = uploadedImageUrl,
+                    VehicleSpecialization = vehicleSpecializations,
+                    ServiceSpecialization = serviceSpecializations
+
                 };
                 await _context.Mechanics.AddAsync(newMechanic);
                 await _context.SaveChangesAsync();
@@ -158,7 +161,30 @@ namespace MekanikApi.Infrastructure.Services
         {
             try
             {
-                var mechanics = await _context.Mechanics.FindAsync();
+                var mechanics = await _context.Mechanics.Include(m => m.VehicleSpecialization)
+                    .Include(m => m.ServiceSpecialization)
+                    .Select(mechanic => new MechanicResponseDTO(
+                        mechanic.UserId,
+                        mechanic.Name,
+                        mechanic.Address,
+                        mechanic.Experience,
+                        mechanic.CarsFixed,
+                        mechanic.ResponseTime,
+                        mechanic.WorkDays,
+                        mechanic.StartHour,
+                        mechanic.StartMeridien,
+                        mechanic.EndHour,
+                        mechanic.EndMeridien,
+                        mechanic.UserType,
+                        mechanic.VerificationStatus,
+                        mechanic.Image,
+                        mechanic.Location != null ? mechanic.Location.Y : 0,
+                        mechanic.Location != null ? mechanic.Location.X : 0,
+                        mechanic.VehicleSpecialization.Select(v => v.Name).ToArray(),
+                        mechanic.ServiceSpecialization.Select(s => s.Name).ToArray()
+                    ))
+                    .ToListAsync();
+
 
                 return new GenericResponse
                 {

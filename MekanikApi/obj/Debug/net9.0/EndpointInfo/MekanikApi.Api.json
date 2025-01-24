@@ -549,6 +549,20 @@
                       "$ref": "#/components/schemas/DayOfWeek"
                     }
                   },
+                  "StartHour": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "StartMeridien": {
+                    "type": "string"
+                  },
+                  "EndHour": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "EndMeridien": {
+                    "type": "string"
+                  },
                   "Latitude": {
                     "type": "number",
                     "format": "double"
@@ -558,7 +572,26 @@
                     "format": "double"
                   },
                   "Image": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "UserId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "VehicleSpecialization": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid"
+                    }
+                  },
+                  "ServiceSpecialization": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid"
+                    }
                   }
                 }
               },
@@ -575,6 +608,18 @@
                 "WorkDays": {
                   "style": "form"
                 },
+                "StartHour": {
+                  "style": "form"
+                },
+                "StartMeridien": {
+                  "style": "form"
+                },
+                "EndHour": {
+                  "style": "form"
+                },
+                "EndMeridien": {
+                  "style": "form"
+                },
                 "Latitude": {
                   "style": "form"
                 },
@@ -582,6 +627,15 @@
                   "style": "form"
                 },
                 "Image": {
+                  "style": "form"
+                },
+                "UserId": {
+                  "style": "form"
+                },
+                "VehicleSpecialization": {
+                  "style": "form"
+                },
+                "ServiceSpecialization": {
                   "style": "form"
                 }
               }
@@ -1035,66 +1089,11 @@
         }
       }
     },
-    "/api/Service": {
+    "/api/Service/specializations": {
       "get": {
         "tags": [
           "Service"
         ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Service"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "string"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "type": "string"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "type": "string"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "OK"
@@ -1196,6 +1195,37 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Service": {
+      "post": {
+        "tags": [
+          "Service"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -1539,66 +1569,11 @@
         }
       }
     },
-    "/api/Vehicle": {
+    "/api/Vehicle/specializations": {
       "get": {
         "tags": [
           "Vehicle"
         ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Vehicle"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "string"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "type": "string"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "type": "string"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "OK"
@@ -1707,6 +1682,37 @@
         }
       }
     },
+    "/api/Vehicle": {
+      "post": {
+        "tags": [
+          "Vehicle"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Vendor/CreateProfile": {
       "post": {
         "tags": [
@@ -1724,16 +1730,6 @@
                   "Address": {
                     "type": "string"
                   },
-                  "Experience": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
-                  "WorkDays": {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/components/schemas/DayOfWeek"
-                    }
-                  },
                   "Latitude": {
                     "type": "number",
                     "format": "double"
@@ -1743,7 +1739,8 @@
                     "format": "double"
                   },
                   "Image": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "binary"
                   }
                 }
               },
@@ -1752,12 +1749,6 @@
                   "style": "form"
                 },
                 "Address": {
-                  "style": "form"
-                },
-                "Experience": {
-                  "style": "form"
-                },
-                "WorkDays": {
                   "style": "form"
                 },
                 "Latitude": {
