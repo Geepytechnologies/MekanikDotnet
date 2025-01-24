@@ -70,7 +70,7 @@ namespace MekanikApi.Application.DTOs.Sms
                 .Must(NotContainWhitespace).WithMessage("PinId cannot contain whitespace.");
             RuleFor(user => user.Otp)
                 .NotEmpty().WithMessage("Otp is required.")
-                .Length(6).WithMessage("Otp is invalid")
+                .Length(4).WithMessage("Otp is invalid")
                 .Must(NotContainWhitespace).WithMessage("Otp cannot contain whitespace.");
         }
 
