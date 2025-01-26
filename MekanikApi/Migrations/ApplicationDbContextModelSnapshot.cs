@@ -261,6 +261,9 @@ namespace MekanikApi.Api.Migrations
                     b.Property<int>("CarsFixed")
                         .HasColumnType("integer");
 
+                    b.Property<string>("CloudinaryImageId")
+                        .HasColumnType("text");
+
                     b.Property<int>("EndHour")
                         .HasColumnType("integer");
 
@@ -287,6 +290,9 @@ namespace MekanikApi.Api.Migrations
 
                     b.Property<string>("StartMeridien")
                         .HasColumnType("text");
+
+                    b.Property<Guid?>("SubscriptionPlanId")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -617,8 +623,14 @@ namespace MekanikApi.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<string>("Name")
                         .HasColumnType("text");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 
@@ -731,10 +743,16 @@ namespace MekanikApi.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("CloudinaryPublicId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<string>("ImageUrl")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("VehicleId")
+                    b.Property<Guid?>("VehicleId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -765,9 +783,14 @@ namespace MekanikApi.Api.Migrations
                     b.Property<Guid?>("SubscriptionPlanId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.HasIndex("SubscriptionPlanId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Vendors");
                 });
@@ -1123,13 +1146,9 @@ namespace MekanikApi.Api.Migrations
 
             modelBuilder.Entity("MekanikApi.Domain.Entities.VehicleImage", b =>
                 {
-                    b.HasOne("MekanikApi.Domain.Entities.Vehicle", "Vehicle")
+                    b.HasOne("MekanikApi.Domain.Entities.Vehicle", null)
                         .WithMany("VehicleImages")
-                        .HasForeignKey("VehicleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Vehicle");
+                        .HasForeignKey("VehicleId");
                 });
 
             modelBuilder.Entity("MekanikApi.Domain.Entities.Vendor", b =>
@@ -1138,6 +1157,14 @@ namespace MekanikApi.Api.Migrations
                         .WithMany()
                         .HasForeignKey("SubscriptionPlanId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("MekanikApi.Domain.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

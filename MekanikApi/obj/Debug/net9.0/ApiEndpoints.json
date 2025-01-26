@@ -289,49 +289,12 @@
   },
   {
     "ContainingType": "MekanikApi.Api.Controllers.MechanicController",
-    "Method": "GetAllMechanics",
-    "RelativePath": "api/Mechanic",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "MekanikApi.Api.Controllers.MechanicController",
     "Method": "Post",
     "RelativePath": "api/Mechanic",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
-      {
-        "Name": "value",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "MekanikApi.Api.Controllers.MechanicController",
-    "Method": "Put",
-    "RelativePath": "api/Mechanic/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
       {
         "Name": "value",
         "Type": "System.String",
@@ -367,6 +330,26 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "MekanikApi.Api.Controllers.MechanicController",
+    "Method": "GetAllMechanics",
+    "RelativePath": "api/Mechanic/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MekanikApi.Api.Controllers.MechanicController",
+    "Method": "GetTravelTime",
+    "RelativePath": "api/Mechanic/Calculate/TravelTime",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "MekanikApi.Api.Controllers.MechanicController",
@@ -444,6 +427,93 @@
       {
         "Name": "ServiceSpecialization",
         "Type": "System.Guid[]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MekanikApi.Api.Controllers.MechanicController",
+    "Method": "GetMechanicsNearMe",
+    "RelativePath": "api/Mechanic/NearbyMechanics",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "latitude",
+        "Type": "System.Double",
+        "IsRequired": false
+      },
+      {
+        "Name": "longitude",
+        "Type": "System.Double",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MekanikApi.Api.Controllers.MechanicController",
+    "Method": "UpdateMechanic",
+    "RelativePath": "api/Mechanic/update",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Address",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Experience",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "WorkDays",
+        "Type": "System.DayOfWeek[]",
+        "IsRequired": false
+      },
+      {
+        "Name": "StartHour",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "StartMeridien",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "EndHour",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "EndMeridien",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Image",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "Latitude",
+        "Type": "System.Nullable\u00601[[System.Double, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Longitude",
+        "Type": "System.Nullable\u00601[[System.Double, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       }
     ],
@@ -791,6 +861,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "MekanikApi.Api.Controllers.SubscriptionController",
+    "Method": "CreateSubscriptionPlan",
+    "RelativePath": "api/Subscription/CreatePlans",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "details",
+        "Type": "MekanikApi.Application.DTOs.Subscription.CreateSubscriptionPlanDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "MekanikApi.Api.Controllers.TransactionController",
     "Method": "Get",
     "RelativePath": "api/Transaction",
@@ -1026,54 +1112,6 @@
   },
   {
     "ContainingType": "MekanikApi.Api.Controllers.VehicleController",
-    "Method": "Post",
-    "RelativePath": "api/Vehicle",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "value",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "MekanikApi.Api.Controllers.VehicleController",
-    "Method": "Get",
-    "RelativePath": "api/Vehicle/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.String",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "MekanikApi.Api.Controllers.VehicleController",
     "Method": "Put",
     "RelativePath": "api/Vehicle/{id}",
     "HttpMethod": "PUT",
@@ -1120,6 +1158,67 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "MekanikApi.Api.Controllers.VehicleController",
+    "Method": "AddANewVehicle",
+    "RelativePath": "api/Vehicle/AddVehicle",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Make",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Model",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Year",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "PlateNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Vin",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "EngineNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Color",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "RegNo",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "RegExpDate",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Images",
+        "Type": "System.Collections.Generic.ICollection\u00601[[Microsoft.AspNetCore.Http.IFormFile, Microsoft.AspNetCore.Http.Features, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "MekanikApi.Api.Controllers.VehicleController",

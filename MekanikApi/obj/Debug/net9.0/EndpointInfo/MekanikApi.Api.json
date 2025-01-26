@@ -649,7 +649,7 @@
         }
       }
     },
-    "/api/Mechanic": {
+    "/api/Mechanic/all": {
       "get": {
         "tags": [
           "Mechanic"
@@ -659,7 +659,41 @@
             "description": "OK"
           }
         }
-      },
+      }
+    },
+    "/api/Mechanic/NearbyMechanics": {
+      "get": {
+        "tags": [
+          "Mechanic"
+        ],
+        "summary": "Returns Mechanics",
+        "description": "Gets Nearby Mechanics",
+        "parameters": [
+          {
+            "name": "latitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Mechanic": {
       "post": {
         "tags": [
           "Mechanic"
@@ -690,37 +724,95 @@
         }
       }
     },
-    "/api/Mechanic/{id}": {
-      "put": {
+    "/api/Mechanic/update": {
+      "patch": {
         "tags": [
           "Mechanic"
         ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "type": "string"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "type": "string"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "type": "string"
+                "type": "object",
+                "properties": {
+                  "Name": {
+                    "type": "string"
+                  },
+                  "Address": {
+                    "type": "string"
+                  },
+                  "Experience": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "WorkDays": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DayOfWeek"
+                    }
+                  },
+                  "StartHour": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "StartMeridien": {
+                    "type": "string"
+                  },
+                  "EndHour": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "EndMeridien": {
+                    "type": "string"
+                  },
+                  "Image": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "Latitude": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "Longitude": {
+                    "type": "number",
+                    "format": "double"
+                  }
+                }
+              },
+              "encoding": {
+                "Name": {
+                  "style": "form"
+                },
+                "Address": {
+                  "style": "form"
+                },
+                "Experience": {
+                  "style": "form"
+                },
+                "WorkDays": {
+                  "style": "form"
+                },
+                "StartHour": {
+                  "style": "form"
+                },
+                "StartMeridien": {
+                  "style": "form"
+                },
+                "EndHour": {
+                  "style": "form"
+                },
+                "EndMeridien": {
+                  "style": "form"
+                },
+                "Image": {
+                  "style": "form"
+                },
+                "Latitude": {
+                  "style": "form"
+                },
+                "Longitude": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -730,7 +822,21 @@
             "description": "OK"
           }
         }
-      },
+      }
+    },
+    "/api/Mechanic/Calculate/TravelTime": {
+      "get": {
+        "tags": [
+          "Mechanic"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Mechanic/{id}": {
       "delete": {
         "tags": [
           "Mechanic"
@@ -1233,6 +1339,37 @@
         }
       }
     },
+    "/api/Subscription/CreatePlans": {
+      "post": {
+        "tags": [
+          "Subscription"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSubscriptionPlanDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSubscriptionPlanDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSubscriptionPlanDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Transaction": {
       "get": {
         "tags": [
@@ -1581,45 +1718,96 @@
         }
       }
     },
-    "/api/Vehicle/{id}": {
-      "get": {
+    "/api/Vehicle/AddVehicle": {
+      "post": {
         "tags": [
           "Vehicle"
         ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Make": {
+                    "type": "string"
+                  },
+                  "Model": {
+                    "type": "string"
+                  },
+                  "Year": {
+                    "type": "string"
+                  },
+                  "PlateNumber": {
+                    "type": "string"
+                  },
+                  "Vin": {
+                    "type": "string"
+                  },
+                  "EngineNumber": {
+                    "type": "string"
+                  },
+                  "Color": {
+                    "type": "string"
+                  },
+                  "RegNo": {
+                    "type": "string"
+                  },
+                  "RegExpDate": {
+                    "type": "string"
+                  },
+                  "Images": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
                 }
               },
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "string"
+              "encoding": {
+                "Make": {
+                  "style": "form"
+                },
+                "Model": {
+                  "style": "form"
+                },
+                "Year": {
+                  "style": "form"
+                },
+                "PlateNumber": {
+                  "style": "form"
+                },
+                "Vin": {
+                  "style": "form"
+                },
+                "EngineNumber": {
+                  "style": "form"
+                },
+                "Color": {
+                  "style": "form"
+                },
+                "RegNo": {
+                  "style": "form"
+                },
+                "RegExpDate": {
+                  "style": "form"
+                },
+                "Images": {
+                  "style": "form"
                 }
               }
             }
           }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
         }
-      },
+      }
+    },
+    "/api/Vehicle/{id}": {
       "put": {
         "tags": [
           "Vehicle"
@@ -1682,42 +1870,13 @@
         }
       }
     },
-    "/api/Vehicle": {
-      "post": {
-        "tags": [
-          "Vehicle"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "string"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "type": "string"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/api/Vendor/CreateProfile": {
       "post": {
         "tags": [
           "Vendor"
         ],
+        "summary": "Create A Vendor Profile",
+        "description": "Requires Authorization Role",
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -1923,6 +2082,20 @@
           "otp": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateSubscriptionPlanDTO": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "price": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false

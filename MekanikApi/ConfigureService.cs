@@ -127,6 +127,7 @@ namespace MekanikApi.Api
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<FileService>();
             services.AddScoped<IJwtService, JwtService>();
+            services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<IMechanicService, MechanicService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<ISmsService, SmsService>();
@@ -134,6 +135,7 @@ namespace MekanikApi.Api
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IVehicleService, VehicleService>();
             services.AddScoped<IVendorService, VendorService>();
+            services.AddScoped<ISubscriptionService, SubscriptionService>();
 
 
 

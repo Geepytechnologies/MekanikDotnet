@@ -15,7 +15,7 @@ services:
       - ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS=true
       - NUGET_FALLBACK_PACKAGES=/.nuget/fallbackpackages
     volumes:
-      - C:\Users\user\Documents\coding\mekanikApi\MekanikApi:/app:rw
+      - C:\Users\user\Documents\coding\MekanikApi\MekanikApi:/app:rw
       - C:\Users\user\Documents\coding\mekanikApi:/src:rw
       - C:\Users\user\vsdbg\vs2017u5:/remote_debugger:rw
       - C:\Users\user\.nuget\packages:/.nuget/packages:ro

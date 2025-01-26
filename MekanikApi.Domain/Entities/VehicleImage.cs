@@ -11,7 +11,9 @@ namespace MekanikApi.Domain.Entities
         public Guid Id { get; set; }
         public string? ImageUrl { get; set; }
 
-        public Guid VehicleId { get; set; }
-        public Vehicle? Vehicle { get; set; }
+        public string? CloudinaryPublicId { get; set; }
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow; 
+
     }
 }

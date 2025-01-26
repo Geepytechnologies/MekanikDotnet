@@ -16,12 +16,9 @@ namespace MekanikApi.Infrastructure.Services
     
     public class FileService
     {
-        
-        
-
         public static GenericTypeResponse<ImageDetailsDTo> UploadImageToCloudinary(IFormFile file)
         {
-            Cloudinary cloudinary = new Cloudinary(Environment.GetEnvironmentVariable("CLOUDINARY_URL"));
+            Cloudinary cloudinary = new(Environment.GetEnvironmentVariable("CLOUDINARY_URL"));
             cloudinary.Api.Secure = true;
 
             if (file == null || file.Length == 0)
@@ -34,6 +31,7 @@ namespace MekanikApi.Infrastructure.Services
             var uploadParams = new ImageUploadParams
             {
                 File = new FileDescription(file.FileName, file.OpenReadStream()),
+                Folder = "mekanik",
                 Transformation = new Transformation().Width(400).Height(400).Crop("fill")
             };
             var uploadResult = cloudinary.Upload(uploadParams);

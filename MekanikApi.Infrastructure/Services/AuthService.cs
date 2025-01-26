@@ -451,16 +451,23 @@ namespace MekanikApi.Infrastructure.Services
                 identityUser.RefreshToken = refreshToken;
 
                 await _userManager.UpdateAsync(identityUser);
-                var refreshResponse = new
-                {
-                    accessToken,
-                    refreshToken
-                };
+                var userDetails = new UserLoginResponseDTO(
+                        UserId: identityUser.Id,
+                        FirstName: identityUser.Firstname,
+                        MiddleName: identityUser.Middlename,
+                        LastName: identityUser.Lastname,
+                        PhoneNumber: identityUser.PhoneNumber,
+                        Email: identityUser.Email,
+                        Profile: identityUser.Profile,
+                        AccessToken: accessToken,
+                        RefreshToken: refreshToken
+                        );
+                
                 return new GenericResponse
                 {
                     StatusCode = 200,
                     Message = "Successful",
-                    Result = refreshResponse
+                    Result = userDetails
                 };
             }
             catch (Exception ex)

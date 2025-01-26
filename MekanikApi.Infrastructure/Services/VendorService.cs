@@ -24,13 +24,15 @@ namespace MekanikApi.Infrastructure.Services
         private readonly ApplicationDbContext _context;
         private readonly ILogger<VendorService> _logger;
         private readonly IJwtService _jwtService;
+        private readonly ILocationService _locationService;
 
-        public VendorService(ApplicationDbContext context, ILogger<VendorService> logger, IJwtService jwtService, UserManager<ApplicationUser> userManager)
+        public VendorService(ApplicationDbContext context, ILogger<VendorService> logger, IJwtService jwtService, UserManager<ApplicationUser> userManager, ILocationService locationService)
         {
             _context = context;
             _logger = logger;
             _jwtService = jwtService;
             _userManager = userManager;
+            _locationService = locationService;
         }
 
         public async Task<GenericResponse> CreateVendorProfile(CreateVendorDTO details, string accessToken)
@@ -75,7 +77,8 @@ namespace MekanikApi.Infrastructure.Services
                     }
 
                 }
-                var newMechanic = new Mechanic
+                identityUser.Profile = [.. identityUser.Profile, Domain.Enums.ApplicationProfile.VENDOR];
+                var newVendor = new Vendor
                 {
                     UserId = identityUser.Id,
                     Name = details.Name,
@@ -83,7 +86,7 @@ namespace MekanikApi.Infrastructure.Services
                     Location = geometryFactory.CreatePoint(new Coordinate(details.Longitude, details.Latitude)),
                     Image = uploadedImageUrl
                 };
-                await _context.Mechanics.AddAsync(newMechanic);
+                await _context.Vendors.AddAsync(newVendor);
                 await _context.SaveChangesAsync();
 
                 return new GenericResponse
@@ -119,7 +122,8 @@ namespace MekanikApi.Infrastructure.Services
                         m.Name,
                         m.Address,
                         m.Image,
-                        Distance = m.Location.Distance(myLocation)
+                        Distance = m.Location.Distance(myLocation),
+                        Time = _locationService.GetTravelTimeAsync(latitude, longitude, m.Location.Y, m.Location.X).Result
                     })
                     .ToList();
 

@@ -71,3 +71,8 @@ C:\Users\user\Documents\coding\mekanikApi\obj\Debug\docker-compose.dcproj.CoreCo
 C:\Users\user\Documents\coding\mekanikApi\obj\Debug\docker-c.35A3FFBA.Up2Date
 C:\Users\user\Documents\coding\mekanikApi\bin\Debug\Serilog.dll
 C:\Users\user\Documents\coding\mekanikApi\bin\Debug\Data\services.json
+C:\Users\user\Documents\coding\MekanikApi\bin\Debug\EmailTemplates\assets\facebook.svg
+C:\Users\user\Documents\coding\MekanikApi\bin\Debug\EmailTemplates\assets\linkedin.svg
+C:\Users\user\Documents\coding\MekanikApi\bin\Debug\EmailTemplates\assets\TwitterX.svg
+C:\Users\user\Documents\coding\MekanikApi\bin\Debug\EmailTemplates\assets\x.svg
+C:\Users\user\Documents\coding\MekanikApi\bin\Debug\EmailTemplates\verification.html

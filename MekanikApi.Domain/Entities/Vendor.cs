@@ -22,5 +22,9 @@ namespace MekanikApi.Domain.Entities
         public Guid? SubscriptionPlanId { get; set; }
 
         public ICollection<Product>? Products { get; set; } = [];
+
+        public Guid UserId { get; set; }
+
+        public ApplicationUser? User { get; set; }
     }
 }

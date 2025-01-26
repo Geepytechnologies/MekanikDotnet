@@ -48,6 +48,11 @@ namespace MekanikApi.Domain.Entities
 
         public string? Image { get; set; }
 
+        public string? CloudinaryImageId { get; set; }
+
+        public Guid? SubscriptionPlanId { get; set; }
+
+
         public ICollection<Service>? ServiceSpecialization { get; set; }
 
         public ICollection<VehicleBrand>? VehicleSpecialization { get; set; }

@@ -5,6 +5,7 @@ using MekanikApi.Application.DTOs.Vendor;
 using MekanikApi.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 
 namespace MekanikApi.Api.Controllers
@@ -23,6 +24,8 @@ namespace MekanikApi.Api.Controllers
 
         [Authorize]
         [HttpPost("CreateProfile")]
+        [SwaggerOperation(Summary = "Create A Vendor Profile", Description = "Requires Authorization Role")]
+
         public async Task<IActionResult> CreateVendorProfile([FromForm] CreateVendorDTO details)
         {
             try

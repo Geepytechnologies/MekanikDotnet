@@ -1,5 +1,8 @@
-﻿using MekanikApi.Application.DTOs.Common;
+﻿using MekanikApi.Api.Extensions;
+using MekanikApi.Application.DTOs.Common;
+using MekanikApi.Application.DTOs.Vehicle;
 using MekanikApi.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -42,20 +45,32 @@ namespace MekanikApi.Api.Controllers
             }
         }
 
-        // GET api/<VehicleController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [Authorize]
+        [HttpPost("AddVehicle")]
+        public async Task<IActionResult> AddANewVehicle([FromForm] VehicleDTO details)
         {
-            return "value";
+            try
+            {
+                var accessToken = HttpContext.GetAuthorizationHeader();
+                var result = await _vehicleService.AddVehicle(details, accessToken);
+                return StatusCode(result.StatusCode, new ApiResponse
+                {
+                    StatusCode = result.StatusCode,
+                    Message = result.Message,
+                    Result = result.Result
+                });
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse
+                {
+                    StatusCode = 500,
+                    Message = "Internal Server Error",
+                });
+                throw;
+            }
         }
 
-        // POST api/<VehicleController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<VehicleController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {

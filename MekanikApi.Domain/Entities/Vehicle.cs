@@ -20,7 +20,7 @@ namespace MekanikApi.Domain.Entities
         public string? RegNo { get; set; }
 
         public string? RegExpDate { get; set; }
-        public ICollection<VehicleImage>? VehicleImages { get; set; }
+        public ICollection<VehicleImage>? VehicleImages { get; set; } = [];
         public Guid UserId { get; set; }
         public ApplicationUser? User { get; set; }
         public DateTime CreatedAt { get; set; }

@@ -200,12 +200,7 @@ namespace MekanikApi.Infrastructure.DataContext
                 .OnDelete(DeleteBehavior.Cascade);
 
 
-            // Vehicle
-            modelBuilder.Entity<Vehicle>()
-                .HasMany(p => p.VehicleImages)
-                .WithOne(pi => pi.Vehicle)
-                .HasForeignKey(pi => pi.VehicleId)
-                .OnDelete(DeleteBehavior.Cascade);
+           
 
             modelBuilder.Entity<Vehicle>()
                 .HasOne(v => v.User)
