@@ -80,6 +80,30 @@ namespace MekanikApi.Api.Controllers
         }
 
         //[Authorize]
+        [HttpGet("profile/{mechanicId}")]
+        public async Task<IActionResult> GetAMechanic(Guid mechanicId)
+        {
+            try
+            {
+                var res = await _mechanicService.GetMechanicProfile(mechanicId);
+                return StatusCode(res.StatusCode, new ApiResponse
+                {
+                    StatusCode = res.StatusCode,
+                    Message = res.Message,
+                    Result = res.Result
+                });
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse
+                {
+                    StatusCode = 500,
+                    Message = "Internal Server Error",
+                });
+                throw;
+            }
+        }
+        //[Authorize]
         [HttpGet("NearbyMechanics")]
         [SwaggerOperation(Summary = "Returns Mechanics", Description = "Gets Nearby Mechanics")]
         public async Task<IActionResult> GetMechanicsNearMe(double latitude, double longitude)

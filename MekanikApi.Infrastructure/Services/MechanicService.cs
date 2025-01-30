@@ -97,6 +97,7 @@ namespace MekanikApi.Infrastructure.Services
                     .ToListAsync();
                 var newMechanic = new Mechanic
                 {
+                   
                     UserId = identityUser.Id,
                     Name = details.Name,
                     Address = details.Address,
@@ -149,10 +150,13 @@ namespace MekanikApi.Infrastructure.Services
                     .Where(m => m.Location.IsWithinDistance(myLocation, 2000))
                     .Select(m => new
                     {
+                        m.Id,
                         m.Name,
                         m.Address,
                         m.Experience,
                         m.WorkDays,
+                        m.Image,
+                        m.UserType,
                         Distance = m.Location.Distance(myLocation),
                         Latitude = m.Location.Y,
                         Longitude = m.Location.X
@@ -172,11 +176,14 @@ namespace MekanikApi.Infrastructure.Services
 
                     mechanics.Add(new
                     {
+                        mechanic.Id,
                         mechanic.Name,
                         mechanic.Address,
                         mechanic.Experience,
                         mechanic.WorkDays,
                         mechanic.Distance,
+                        mechanic.Image,
+                        mechanic.UserType,
                         Time = travelTime
                     });
                 }
@@ -207,6 +214,7 @@ namespace MekanikApi.Infrastructure.Services
                 var mechanics = await _context.Mechanics.Include(m => m.VehicleSpecialization)
                     .Include(m => m.ServiceSpecialization)
                     .Select(mechanic => new MechanicResponseDTO(
+                        mechanic.Id,
                         mechanic.UserId,
                         mechanic.Name,
                         mechanic.Address,
@@ -248,9 +256,58 @@ namespace MekanikApi.Infrastructure.Services
             }
         }
 
-        public Task<GenericResponse> GetMechanicProfile(Guid mechanicId)
+        public async Task<GenericResponse> GetMechanicProfile(Guid mechanicId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var mechanic = await _context.Mechanics
+                    .Include(m => m.VehicleSpecialization)
+                    .Include(m => m.ServiceSpecialization)
+                    .Where(m => m.Id == mechanicId)
+                    .Select(mechanic => new MechanicResponseDTO(
+                        mechanic.Id,
+                        mechanic.UserId,
+                        mechanic.Name,
+                        mechanic.Address,
+                        mechanic.Experience,
+                        mechanic.CarsFixed,
+                        mechanic.ResponseTime,
+                        mechanic.WorkDays,
+                        mechanic.StartHour,
+                        mechanic.StartMeridien,
+                        mechanic.EndHour,
+                        mechanic.EndMeridien,
+                        mechanic.UserType,
+                        mechanic.VerificationStatus,
+                        mechanic.Image,
+                        mechanic.Location != null ? mechanic.Location.Y : 0,
+                        mechanic.Location != null ? mechanic.Location.X : 0,
+                        mechanic.VehicleSpecialization.Select(v => v.Name).ToArray(),
+                        mechanic.ServiceSpecialization.Select(s => s.Name).ToArray()
+                    ))
+                    .ToListAsync();
+
+                if (mechanic is null)
+                {
+                    return new GenericResponse
+                    {
+                        StatusCode = 404,
+                        Message = "Mechanic not found"
+                    };
+                }
+               
+                return new GenericResponse
+                {
+                    StatusCode = 200,
+                    Message = "Successful",
+                    Result = mechanic
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error fetching mechanic: {msg}", ex.Message);
+                throw;
+            }
         }
 
         public async Task<GenericResponse> UpdateAMechanic(UpdateMechanicDTO details, string accessToken)
@@ -343,6 +400,7 @@ namespace MekanikApi.Infrastructure.Services
                 var serviceSpecializations = mechanic.ServiceSpecialization?.Select(s => s.Name).ToArray() ?? [];
 
                 var mechanicResponse = new MechanicResponseDTO(
+                    mechanic.Id,
                     mechanic.UserId,
                     mechanic.Name,
                     mechanic.Address,

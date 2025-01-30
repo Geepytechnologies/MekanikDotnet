@@ -455,6 +455,22 @@
   },
   {
     "ContainingType": "MekanikApi.Api.Controllers.MechanicController",
+    "Method": "GetAMechanic",
+    "RelativePath": "api/Mechanic/profile/{mechanicId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mechanicId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MekanikApi.Api.Controllers.MechanicController",
     "Method": "UpdateMechanic",
     "RelativePath": "api/Mechanic/update",
     "HttpMethod": "PATCH",
