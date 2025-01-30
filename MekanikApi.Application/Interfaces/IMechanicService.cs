@@ -16,6 +16,8 @@ namespace MekanikApi.Application.Interfaces
 
         Task<GenericResponse> GetMechanicProfile(Guid mechanicId);
 
+        Task<GenericResponse> GetMechanicProfileWithUser(string accessToken);
+
         Task<GenericResponse> FindMechanicsNearMe(double latitude, double longitude);
 
         Task<GenericResponse> RequestForAMechanic(RequestMechanicDTO details, string accessToken);

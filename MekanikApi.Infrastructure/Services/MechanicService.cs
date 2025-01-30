@@ -310,6 +310,73 @@ namespace MekanikApi.Infrastructure.Services
             }
         }
 
+        public async Task<GenericResponse> GetMechanicProfileWithUser(string accessToken)
+        {
+            try
+            {
+                var principal = _jwtService.GetTokenPrincipal(accessToken);
+
+                if (principal is null)
+                {
+                    return new GenericResponse
+                    {
+                        StatusCode = 403,
+                        Message = "Error validating token"
+                    };
+                }
+
+                var userId = principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                var identityUser = await _userManager.FindByIdAsync(userId);
+                var mechanic = await _context.Mechanics
+                    .Include(m => m.VehicleSpecialization)
+                    .Include(m => m.ServiceSpecialization)
+                    .Where(m => m.UserId == identityUser.Id)
+                    .Select(mechanic => new MechanicResponseDTO(
+                        mechanic.Id,
+                        mechanic.UserId,
+                        mechanic.Name,
+                        mechanic.Address,
+                        mechanic.Experience,
+                        mechanic.CarsFixed,
+                        mechanic.ResponseTime,
+                        mechanic.WorkDays,
+                        mechanic.StartHour,
+                        mechanic.StartMeridien,
+                        mechanic.EndHour,
+                        mechanic.EndMeridien,
+                        mechanic.UserType,
+                        mechanic.VerificationStatus,
+                        mechanic.Image,
+                        mechanic.Location != null ? mechanic.Location.Y : 0,
+                        mechanic.Location != null ? mechanic.Location.X : 0,
+                        mechanic.VehicleSpecialization.Select(v => v.Name).ToArray(),
+                        mechanic.ServiceSpecialization.Select(s => s.Name).ToArray()
+                    ))
+                    .ToListAsync();
+
+                if (mechanic is null)
+                {
+                    return new GenericResponse
+                    {
+                        StatusCode = 404,
+                        Message = "Mechanic not found"
+                    };
+                }
+
+                return new GenericResponse
+                {
+                    StatusCode = 200,
+                    Message = "Successful",
+                    Result = mechanic
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error fetching mechanic: {msg}", ex.Message);
+                throw;
+            }
+        }
         public async Task<GenericResponse> UpdateAMechanic(UpdateMechanicDTO details, string accessToken)
         {
             try

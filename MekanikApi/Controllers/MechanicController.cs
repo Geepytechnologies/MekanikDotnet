@@ -103,6 +103,33 @@ namespace MekanikApi.Api.Controllers
                 throw;
             }
         }
+
+        [Authorize]
+        [HttpGet("profile/user")]
+        public async Task<IActionResult> GetAMechanicByUserID()
+        {
+            try
+            {
+                var accessToken = HttpContext.GetAuthorizationHeader();
+                var res = await _mechanicService.GetMechanicProfileWithUser(accessToken);
+                return StatusCode(res.StatusCode, new ApiResponse
+                {
+                    StatusCode = res.StatusCode,
+                    Message = res.Message,
+                    Result = res.Result
+                });
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse
+                {
+                    StatusCode = 500,
+                    Message = "Internal Server Error",
+                });
+                throw;
+            }
+        }
+
         //[Authorize]
         [HttpGet("NearbyMechanics")]
         [SwaggerOperation(Summary = "Returns Mechanics", Description = "Gets Nearby Mechanics")]
